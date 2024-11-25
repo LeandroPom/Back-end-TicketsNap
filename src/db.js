@@ -46,7 +46,7 @@ modelDefiners.forEach(model => model(sequelize));
 const {  } = sequelize.models;
 // Extrae los modelos definidos dentro de Sequelize
 
-// Relacionar los modelos en la base de datos
+// Relacionar los modelos en la data base
 
 
 module.exports = {

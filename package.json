@@ -1,7 +1,7 @@
 {
     "name": "ticketsnap-backend",
     "version": "1.0.0",
-    "description": "Backend for a news website with user interactions, comments, likes, votes, and media support.",
+    "description": "Backend de ticketsnap",
     "main": "index.js",
     "scripts": {
       "start": "node index.js",
