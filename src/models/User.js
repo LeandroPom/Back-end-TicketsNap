@@ -11,20 +11,16 @@ module.exports = (sequelize) => {
       autoIncrement: true
       // ID único autoincremental que identifica a cada usuario
     },
-    firstName: {
+    name: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: false
       // Nombre del usuario (opcional)
-    },
-    lastName: {
-      type: DataTypes.STRING
-      // Apellido del usuario (opcional)
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
       unique: true
-      // Dirección de correo electrónico (debe ser única y es opcional)
+      // Dirección de correo electrónico (debe ser único y es obligatorio)
     },
     password: {
       type: DataTypes.STRING,
@@ -48,7 +44,8 @@ module.exports = (sequelize) => {
       // Fecha de registro del usuario, se genera automáticamente al momento de crearlo
     },
     phone: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: true
       // Número de teléfono del usuario (opcional)
     },
     isAdmin: {
@@ -62,7 +59,8 @@ module.exports = (sequelize) => {
       // Indica si el usuario se registró utilizando Google
     },
     image: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: true
       // URL de la imagen de perfil del usuario (opcional)
     },
     state: {
@@ -74,16 +72,6 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
       // Indica si el usuario ha confirmado su cuenta (por defecto, no)
-    },
-    body: {
-      type: DataTypes.TEXT,
-      allowNull: true
-      // Descripción o información adicional sobre el usuario (opcional)
-    },
-    stars: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-      // Cantidad de estrellas asignadas al usuario (opcional)
     },
     role: {
       type: DataTypes.ENUM('editor', 'user'),
