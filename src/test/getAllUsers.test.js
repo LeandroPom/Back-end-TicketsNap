@@ -13,15 +13,22 @@ describe("getAllUsers Controller", () => {
     jest.clearAllMocks(); // Limpia los mocks antes de cada prueba
   });
 
-  it("should return all users if users exist", async () => {
+  it("should return all users with non-empty properties if users exist", async () => {
     const mockUsers = [
       { id: 1, name: "User 1", email: "user1@example.com", role: "user", state: true },
-      { id: 2, name: "User 2", email: "user2@example.com", role: "editor", state: true },
+      { id: 2, name: "User 2", email: "user2@example.com", role: "", state: false },
     ];
     User.findAll.mockResolvedValue(mockUsers);
 
     const result = await getAllUsers();
-    expect(result).toEqual(mockUsers);
+
+    // Esperamos que las propiedades vacías se hayan filtrado
+    const expectedUsers = [
+      { id: 1, name: "User 1", email: "user1@example.com", role: "user", state: true },
+      { id: 2, name: "User 2", email: "user2@example.com", state: false },
+    ];
+
+    expect(result).toEqual(expectedUsers);
     expect(User.findAll).toHaveBeenCalledTimes(1);
   });
 

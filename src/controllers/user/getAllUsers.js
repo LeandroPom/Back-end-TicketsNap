@@ -12,17 +12,24 @@ module.exports = async () => {
 
     // Filtra las propiedades vacías o nulas de cada usuario
     const filteredUsers = allUsers.map(user => {
+
       const filteredUser = {};
+
       Object.entries(user.dataValues).forEach(([key, value]) => {
+
         if (value !== null && value !== undefined && value !== '') {
           filteredUser[key] = value;
         }
       });
+
       return filteredUser;
+
     });
 
     return filteredUsers;
+
   } catch (error) {
+
     throw new Error(`Database error: ${error.message}`);
   }
 };
