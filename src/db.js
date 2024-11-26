@@ -43,21 +43,21 @@ fs.readdirSync(path.join(__dirname, '/models'))
 modelDefiners.forEach(model => model(sequelize));
 // Itera sobre todos los modelos cargados y los define en la instancia de sequelize.
 
-const { User, Ticket, Show, Location } = sequelize.models;
+const { User, Ticket, Show, Place } = sequelize.models;
 // Extrae los modelos definidos dentro de Sequelize.
 
 // **Relaciones entre modelos**
 // Un User puede tener muchos Tickets.
-User.hasMany(Ticket, {through:'user_tickets' });
-Ticket.belongsTo(User, {through:'user_tickets' });
+User.belongsToMany(Ticket, {through:'user_tickets' });
+Ticket.hasOne(User, {through:'user_tickets' });
 
 // Un Ticket pertenece a un único Show.
-Ticket.belongsTo(Show, {through:'show_tickets' });
-Show.hasMany(Ticket, {through:'show_tickets' });
+Ticket.hasOne(Show, {through:'show_tickets' });
+Show.belongsToMany(Ticket, {through:'show_tickets' });
 
-// Muchos Shows pertenecen a una sola Location.
-Show.belongsTo(Location, {through:'show_location' });
-Location.hasMany(Show, {through:'show_location' });
+// Muchos Shows pertenecen a muchos Place.
+Show.belongsToMany(Place, {through:'show_place' });
+Place.belongsToMany(Show, {through:'show_place' });
 
 module.exports = {
   ...sequelize.models, // Exporta todos los modelos creados en Sequelize.
