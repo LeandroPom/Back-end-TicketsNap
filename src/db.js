@@ -48,16 +48,16 @@ const { User, Ticket, Show, Location } = sequelize.models;
 
 // **Relaciones entre modelos**
 // Un User puede tener muchos Tickets.
-User.hasMany(Ticket, { foreignKey: "userId", as: "tickets" });
-Ticket.belongsTo(User, { foreignKey: "userId", as: "user" });
+User.hasMany(Ticket, {through:'user_tickets' });
+Ticket.belongsTo(User, {through:'user_tickets' });
 
 // Un Ticket pertenece a un único Show.
-Ticket.belongsTo(Show, { foreignKey: "showId", as: "show" });
-Show.hasMany(Ticket, { foreignKey: "showId", as: "tickets" });
+Ticket.belongsTo(Show, {through:'show_tickets' });
+Show.hasMany(Ticket, {through:'show_tickets' });
 
 // Muchos Shows pertenecen a una sola Location.
-Show.belongsTo(Location, { foreignKey: "locationId", as: "location" });
-Location.hasMany(Show, { foreignKey: "locationId", as: "shows" });
+Show.belongsTo(Location, {through:'show_location' });
+Location.hasMany(Show, {through:'show_location' });
 
 module.exports = {
   ...sequelize.models, // Exporta todos los modelos creados en Sequelize.
