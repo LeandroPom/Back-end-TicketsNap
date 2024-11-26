@@ -25,31 +25,41 @@ const sequelize = NODE_ENV === "production"
       logging: false,
       native: false,
     });
-// Configura la conexión a la base de datos con Sequelize. Si el entorno es "producción", se configuran opciones adicionales para la conexión segura (SSL). En desarrollo, la conexión es más simple.
+// Configura la conexión a la base de datos con Sequelize.
 
 const basename = path.basename(__filename);
-// Obtiene el nombre del archivo actual para evitar incluirlo luego al cargar modelos
+// Obtiene el nombre del archivo actual para evitar incluirlo luego al cargar modelos.
 
 const modelDefiners = [];
-// Arreglo donde se almacenarán las definiciones de modelos (archivos .js)
+// Arreglo donde se almacenarán las definiciones de modelos.
 
 fs.readdirSync(path.join(__dirname, '/models'))
   .filter((file) => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js')
   .forEach((file) => {
     modelDefiners.push(require(path.join(__dirname, '/models', file)));
   });
-// Lee todos los archivos en la carpeta 'models' y carga aquellos que no empiezan con un punto (.) y que sean archivos .js. Luego, los añade al arreglo modelDefiners.
+// Lee todos los archivos en la carpeta 'models' y los añade al arreglo modelDefiners.
 
 modelDefiners.forEach(model => model(sequelize));
-// Itera sobre todos los modelos cargados y los define en la instancia de sequelize
+// Itera sobre todos los modelos cargados y los define en la instancia de sequelize.
 
-const {  } = sequelize.models;
-// Extrae los modelos definidos dentro de Sequelize
+const { User, Ticket, Show, Location } = sequelize.models;
+// Extrae los modelos definidos dentro de Sequelize.
 
-// Relacionar los modelos en la data base
+// **Relaciones entre modelos**
+// Un User puede tener muchos Tickets.
+User.hasMany(Ticket, { foreignKey: "userId", as: "tickets" });
+Ticket.belongsTo(User, { foreignKey: "userId", as: "user" });
 
+// Un Ticket pertenece a un único Show.
+Ticket.belongsTo(Show, { foreignKey: "showId", as: "show" });
+Show.hasMany(Ticket, { foreignKey: "showId", as: "tickets" });
+
+// Muchos Shows pertenecen a una sola Location.
+Show.belongsTo(Location, { foreignKey: "locationId", as: "location" });
+Location.hasMany(Show, { foreignKey: "locationId", as: "shows" });
 
 module.exports = {
-  ...sequelize.models, // Exporta todos los modelos creados en Sequelize
-  conn: sequelize,     // Exporta la conexión a la base de datos
+  ...sequelize.models, // Exporta todos los modelos creados en Sequelize.
+  conn: sequelize,     // Exporta la conexión a la base de datos.
 };
