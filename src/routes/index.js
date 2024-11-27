@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const userRouter = require('./user.routes');
-// const tagRouter = require('./tag.routes');
+const showRouter = require('./show.routes');
+const tagRouter = require('./tag.routes');
 
 
 
@@ -14,7 +15,8 @@ router.use((req, res, next) => {
 
 
 router.use('/users', userRouter);
-// router.use('/tags', tagRouter);
+router.use('/shows', showRouter);
+router.use('/tags', tagRouter);
 
 
 module.exports = router;
