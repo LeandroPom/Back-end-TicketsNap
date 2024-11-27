@@ -23,12 +23,12 @@ module.exports = (sequelize) => {
         },
         artists: {
             type: DataTypes.ARRAY(DataTypes.STRING),
-            allowNull: true
+            allowNull: false
             // Lista de artistas que participan en el show, opcional
         },
         genre: {
             type: DataTypes.ARRAY(DataTypes.STRING),
-            allowNull: true
+            allowNull: false
             // Arreglo de géneros relacionados con el show, opcional
         },
         description: {
@@ -43,10 +43,10 @@ module.exports = (sequelize) => {
         },
         location: {
             type: DataTypes.JSON,
-            allowNull: true
+            allowNull: false
             // Información de la ubicación como un objeto JSON con "name" y "address"
         },
-        function: {
+        presentation: {
             type: DataTypes.ARRAY(DataTypes.JSON),
             allowNull: false,
             validate: {
