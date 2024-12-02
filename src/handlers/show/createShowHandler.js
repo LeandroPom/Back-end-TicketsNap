@@ -3,11 +3,27 @@ const createShow = require('../../controllers/show/createShow');
 
 module.exports = async (req, res) => {
 
-    const { name, artists, genre, location, presentation, description, coverImage } = req.body;
+    const { 
+      name,
+      artists,
+      genre,
+      location,
+      presentation,
+      description,
+      coverImage
+     } = req.body;
     
   try {
 
-    const newShow = await createShow(name, artists, genre, location, presentation, description, coverImage);
+    const newShow = await createShow(
+      name,
+      artists,
+      genre,
+      location,
+      presentation,
+      description,
+      coverImage
+    );
 
     console.log('Show created successfully:', newShow);
     res.status(201).json(newShow);
