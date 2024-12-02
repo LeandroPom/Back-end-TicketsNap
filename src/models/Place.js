@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
         },
         address: {
             type: DataTypes.STRING, 
-            allowNull: true 
+            allowNull: false 
             // Dirección de la ubicación, opcional
         },
         capacity: {
@@ -31,7 +31,7 @@ module.exports = (sequelize) => {
         },
         layout: {
             type: DataTypes.ENUM('theater', 'arena', 'field', 'mixed'), 
-            allowNull: false 
+            allowNull: true 
             // Disposición del establecimiento, obligatorio
         }
     }, {
