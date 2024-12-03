@@ -6,7 +6,7 @@ const getUserById = require('../handlers/user/getUserByIdHandler');
 
 
 userRouter.get('/', getAllUsers);
-userRouter.get('/users/:id', getUserById);
+userRouter.get('/:id', getUserById);
 userRouter.post('/', createUser);
 
 module.exports = userRouter;

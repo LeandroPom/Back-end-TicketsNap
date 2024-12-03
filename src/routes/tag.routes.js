@@ -6,7 +6,7 @@ const getTagById = require('../handlers/tag/getTagByIdHandler');
 
 
 tagRouter.get('/', getAllTags);
-tagRouter.get('/tags/:id', getTagById);
+tagRouter.get('/:id', getTagById);
 tagRouter.post('/', createTag);
 
 module.exports = tagRouter;
