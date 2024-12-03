@@ -1,19 +1,43 @@
 const { Show, Ticket, Place } = require('../../db');
 
 module.exports = async (id) => {
+  // Validar ID
+  if (!/^\d+$/.test(id)) {
+    throw { code: 400, message: 'Invalid ID format' };
+  }
 
-  if (!/^\d+$/.test(id)) throw new Error('Invalid ID format');
+  try {
+    // Buscar el show por ID, incluyendo Tickets y Place
+    const show = await Show.findByPk(id, {
+      include: [
+        {
+          model: Ticket,
+          attributes: ['id', 'row'],
+        },
+        {
+          model: Place,
+          attributes: ['id', 'capacity', 'address'],
+        },
+      ],
+    });
 
-  const show = await Show.findByPk(id, {
+    // Si no se encuentra el Show
+    if (!show) {
+      throw { code: 400, message: `Show with ID ${id} not found` };
+    }
 
-    include: [
-      { model: Ticket, attributes: ['id', 'price'] },
-      { model: Place, attributes: ['id', 'name', 'location'] }
-    ]
-    
-  });
+    // Revisar relaciones con otros modelos y agregar mensajes si faltan
+    if (!show.Tickets || show.Tickets.length === 0) {
+      show.setDataValue('Tickets', { message: 'No tickets found for this show.' });
+    }
 
-  if (!show) throw new Error(`Show with ID ${id} not found`);
+    if (!show.Place) {
+      show.setDataValue('Place', { message: 'Place information not available.' });
+    }
 
-  return show;
+    return show;
+  } catch (error) {
+    // Manejo de errores generales
+    throw error.code ? error : { code: 500, message: 'An unexpected error occurred' };
+  }
 };

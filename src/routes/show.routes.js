@@ -6,7 +6,7 @@ const getShowById = require('../handlers/show/getShowByIdHandler');
 
 
 showRouter.get('/', getAllShows);
-showRouter.get('/shows/:id', getShowById);
+showRouter.get('/:id', getShowById);
 showRouter.post('/', createShow);
 
 module.exports = showRouter;
