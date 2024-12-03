@@ -2,7 +2,7 @@ const getUserById = require('../../controllers/user/getUserById');
 
 module.exports = async (req, res) => {
 
-  const { id } = req.params; // Cambia de req.query a req.params
+  const { id } = req.params;
   console.log(`Solicitud para obtener el usuario con ID: ${id}`);
 
   try {
