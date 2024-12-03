@@ -1,6 +1,7 @@
 const getTagById = require('../../controllers/tag/getTagById');
 
 module.exports = async (req, res) => {
+  
   const { id } = req.params;
 
   try {
