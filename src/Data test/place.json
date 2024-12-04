@@ -1,0 +1,47 @@
+[
+  {
+    "name": "City Hall",
+    "address": "456 Central Avenue",
+    "capacity": 3000
+  },
+  {
+    "name": "Night Club",
+    "address": "789 Nightlife Road",
+    "capacity": 1500
+  },
+  {
+    "name": "Symphony Hall",
+    "address": "101 Symphony Lane",
+    "capacity": 4000
+  },
+  {
+    "name": "Street Arena",
+    "address": "202 Urban Blvd",
+    "capacity": 2500
+  },
+  {
+    "name": "Jazz Club",
+    "address": "303 Jazz Alley",
+    "capacity": 800
+  },
+  {
+    "name": "Open Field",
+    "address": "404 Country Road",
+    "capacity": 2000
+  },
+  {
+    "name": "Music Hall",
+    "address": "505 Blues Street",
+    "capacity": 3500
+  },
+  {
+    "name": "Outdoor Arena",
+    "address": "606 Rock Parkway",
+    "capacity": 6000
+  },
+  {
+    "name": "Fusion Club",
+    "address": "707 Fusion Drive",
+    "capacity": 1200
+  }
+]
