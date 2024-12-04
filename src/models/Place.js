@@ -28,11 +28,6 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER, 
             allowNull: false 
             // Capacidad máxima del establecimiento, obligatorio
-        },
-        layout: {
-            type: DataTypes.ENUM('theater', 'arena', 'field', 'mixed'), 
-            allowNull: true 
-            // Disposición del establecimiento, obligatorio
         }
     }, {
         timestamps: false, 
