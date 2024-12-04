@@ -1,5 +1,10 @@
 [
   {
+    "name": "Grand Arena",
+    "address": "123 Main Street",
+    "capacity": 5000
+  },
+  {
     "name": "City Hall",
     "address": "456 Central Avenue",
     "capacity": 3000
