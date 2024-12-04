@@ -8,7 +8,7 @@ const getPlaceByName = require('../handlers/place/getPlaceByNameHandler');
 
 placeRouter.get('/', getAllPlaces);
 // placeRouter.get('/places/:id', getPlaceById);
-placeRouter.post('/', getPlaceByName);
+placeRouter.post('/name/', getPlaceByName);
 placeRouter.post('/', createPlace);
 
 module.exports = placeRouter;

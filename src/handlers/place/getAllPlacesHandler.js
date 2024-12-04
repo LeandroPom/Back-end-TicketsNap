@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
     // Llamar al controlador para obtener todos los registros de Place
     const places = await getAllPlaces();
 
-    console.log('Places retrieved successfully:', places);
+    console.log('Places retrieved successfully:');
 
     res.status(200).json(places); // Responder con todos los registros
   } catch (error) {
