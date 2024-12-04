@@ -1,4 +1,4 @@
-const createZone = require('../../controllers/createZone');
+const createZone = require('../../controllers/zone/createZone');
 
 module.exports = async (req, res) => {
   const { zoneName, seats } = req.body;
@@ -17,7 +17,9 @@ module.exports = async (req, res) => {
       message: 'Zona creada exitosamente',
       zone: newZone,
     });
+
   } catch (error) {
+    
     res.status(500).json({
       error: 'Error al crear la zona',
       details: error.message,
