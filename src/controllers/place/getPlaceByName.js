@@ -10,7 +10,9 @@ module.exports = async (name) => {
     // Buscar los lugares que coincidan con el nombre
     const places = await Place.findAll({
       where: { name },
-      attributes: ['id', 'name', 'address', 'capacity', 'layout', 'state'], // Campos específicos
+      attributes: [
+            // 'id', 'name', 'address', 'capacity', 'layout', 'state'
+        ], // Campos específicos
     });
 
     // Si no se encuentran resultados, lanzar un mensaje
