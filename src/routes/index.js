@@ -3,6 +3,7 @@ const userRouter = require('./user.routes');
 const showRouter = require('./show.routes');
 const tagRouter = require('./tag.routes');
 const placeRouter = require('./place.routes');
+const zoneRouter = require('./zone.routes');
 
 
 
@@ -19,6 +20,7 @@ router.use('/users', userRouter);
 router.use('/shows', showRouter);
 router.use('/tags', tagRouter);
 router.use('/places', placeRouter);
+router.use('/zones', zoneRouter);
 
 
 module.exports = router;
