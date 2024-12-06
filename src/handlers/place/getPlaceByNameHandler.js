@@ -1,8 +1,8 @@
 const getPlaceByName = require('../../controllers/place/getPlaceByName');
 
 module.exports = async (req, res) => {
-  const { name } = req.body; // Obtener el parámetro "name" desde la query
-  console.log(name)
+  const { name } = req.params; // Obtener el parámetro "name" desde la ruta
+  console.log('Received name:', name);
 
   try {
     // Llamar al controlador con el nombre proporcionado
