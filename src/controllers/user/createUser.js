@@ -1,6 +1,6 @@
 const { User } = require('../../db');
 
-module.exports = async (name, email, password, image, role, createdBy) => {
+module.exports = async (name, email, password, image, role, admin, createdBy) => {
   // Validar el nombre
   if (!name || name.length > 40) {
     throw new Error("Name is required and must not exceed 40 characters");
@@ -33,6 +33,7 @@ module.exports = async (name, email, password, image, role, createdBy) => {
     state: true,
     confirmed: false,
     disabled: false,
+    isAdmin: admin || false,
     // createdBy, // Registrar quién lo creó
   });
 
