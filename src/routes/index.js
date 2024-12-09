@@ -4,6 +4,7 @@ const showRouter = require('./show.routes');
 const tagRouter = require('./tag.routes');
 const placeRouter = require('./place.routes');
 const zoneRouter = require('./zone.routes');
+const analiticsRouter = require('./analitics.routes');
 
 
 
@@ -16,6 +17,7 @@ router.use((req, res, next) => {
 });
 
 
+router.use('/analitics', analiticsRouter);
 router.use('/users', userRouter);
 router.use('/shows', showRouter);
 router.use('/tags', tagRouter);
