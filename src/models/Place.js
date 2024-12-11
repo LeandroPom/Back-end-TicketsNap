@@ -1,4 +1,4 @@
-// models/Location.js
+// models/Place.js
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {

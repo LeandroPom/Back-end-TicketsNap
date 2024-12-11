@@ -4,9 +4,10 @@
     "description": "Backend de ticketsnap",
     "main": "index.js",
     "scripts": {
-        "start": "node index.js",
-        "dev": "nodemon index.js",
-        "test": "jest"
+      "start": "node index.js",
+      "dev": "nodemon index.js",
+      "test": "jest",
+      "seed": "node ./src/scripts/loadSeeds.js"
     },
     "dependencies": {
         "axios": "^1.6.0",
