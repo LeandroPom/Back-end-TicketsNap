@@ -18,19 +18,19 @@ async function loadSeeds() {
     // }
 
     // Lugares
-    const placesData = JSON.parse(fs.readFileSync(path.join(seedsPath, 'places.json'), 'utf-8'));
+    const placesData = JSON.parse(fs.readFileSync(path.join(seedsPath, '../seeds/places.json'), 'utf-8'));
     for (const placeData of placesData) {
       await Place.create(placeData);
     }
 
     // Tags
-    const tagsData = JSON.parse(fs.readFileSync(path.join(seedsPath, 'tags.json'), 'utf-8'));
+    const tagsData = JSON.parse(fs.readFileSync(path.join(seedsPath, '../seeds/tags.json'), 'utf-8'));
     for (const tagData of tagsData) {
       await Tag.create(tagData);
     }
 
     // Shows
-    const showsData = JSON.parse(fs.readFileSync(path.join(seedsPath, 'shows.json'), 'utf-8'));
+    const showsData = JSON.parse(fs.readFileSync(path.join(seedsPath, '../seeds/shows.json'), 'utf-8'));
     for (const showData of showsData) {
       await Show.create(showData);
     }

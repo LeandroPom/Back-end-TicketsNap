@@ -97,11 +97,11 @@
     },
     {
         "id": 25,
-        "name": "Classical"
+        "name": "Beatbox"
     },
     {
         "id": 26,
-        "name": "Electronic"
+        "name": "Trash"
     },
     {
         "id": 27,
@@ -113,10 +113,10 @@
     },
     {
         "id": 29,
-        "name": "Hip Hop"
+        "name": "Balada"
     },
     {
         "id": 30,
-        "name": "Indie"
+        "name": "Country"
     }
 ]
