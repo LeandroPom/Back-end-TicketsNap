@@ -1,12 +1,13 @@
 const editShow = require('../../controllers/show/editShow');
 
 module.exports = async (req, res) => {
-    // Paso 1: Validar permisos del usuario
-    if (!req.body.user?.isAdmin) {
-        return res.status(403).json({ error: 'No tienes permisos para realizar esta acción.' });
-    }
+    // // Paso 1: Validar permisos del usuario
+    // if (!req.body.user?.isAdmin) {
+    //     return res.status(403).json({ error: 'No tienes permisos para realizar esta acción.' });
+    // }
 
     // Paso 2: Extraer datos del cuerpo de la solicitud
+    
     const { id, updates } = req.body;
 
     // Paso 3: Validar que se proporcione un identificador

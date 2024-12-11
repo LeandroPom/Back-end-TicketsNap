@@ -6,11 +6,11 @@ const getAllZones = require('../controllers/zone/getAllZones');
 module.exports = async (req, res) => {
 
       // Validar permisos de administrador**
-  if (!req.body.user?.isAdmin) {
-    return res.status(403).json({
-      error: 'No tienes permisos para realizar esta acción.',
-    });
-  }
+  // if (!req.body.user?.isAdmin) {
+  //   return res.status(403).json({
+  //     error: 'No tienes permisos para realizar esta acción.',
+  //   });
+  // }
 
   try {
     // Llamar al controlador para obtener todos datos

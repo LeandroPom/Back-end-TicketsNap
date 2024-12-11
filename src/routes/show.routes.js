@@ -8,7 +8,7 @@ const editShow = require('../handlers/show/editShowHandler');
 
 showRouter.get('/', getAllShows);
 showRouter.get('/:id', getShowById);
-showRouter.put('/edit', editShow);
+showRouter.put("/edit/:id", editShow);
 showRouter.post('/', createShow);
 
 module.exports = showRouter;
