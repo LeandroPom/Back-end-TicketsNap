@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
     const zones = await getAllZones();
 
 
-    res.status(200).json({shows, users, places, zones}); // Responder con todos los registros
+    res.status(200).json({users, shows, places, zones}); // Responder con todos los registros
   } catch (error) {
     console.error('Error retrieving data:', error.message);
 
