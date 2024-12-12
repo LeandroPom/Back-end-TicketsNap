@@ -53,6 +53,11 @@ module.exports = (sequelize) => {
       defaultValue: false
       // Indica si el usuario tiene permisos de administrador (por defecto, no)
     },
+    cashier: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+      // Indica si el usuario tiene permisos de cajero (por defecto, no)
+    },
     google: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
@@ -63,21 +68,10 @@ module.exports = (sequelize) => {
       allowNull: true
       // URL de la imagen de perfil del usuario (opcional)
     },
-    state: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true
-      // Estado del usuario (activo por defecto)
-    },
     confirmed: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
       // Indica si el usuario ha confirmado su cuenta (por defecto, no)
-    },
-    role: {
-      type: DataTypes.ENUM('editor', 'user'),
-      allowNull: false,
-      defaultValue: 'user'
-      // Rol del usuario, puede ser 'editor' o 'user' (por defecto, 'user')
     },
     disabled: {
       type: DataTypes.BOOLEAN,
