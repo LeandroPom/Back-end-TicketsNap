@@ -1,0 +1,122 @@
+[
+    {
+        "id": 100,
+        "name": "Ambient"
+    },
+    {
+        "id": 200,
+        "name": "Blues"
+    },
+    {
+        "id": 300,
+        "name": "Classical"
+    },
+    {
+        "id": 400,
+        "name": "Disco"
+    },
+    {
+        "id": 500,
+        "name": "Dubstep"
+    },
+    {
+        "id": 600,
+        "name": "Edm"
+    },
+    {
+        "id": 700,
+        "name": "Electronic"
+    },
+    {
+        "id": 800,
+        "name": "Gospel"
+    },
+    {
+        "id": 900,
+        "name": "Grunge"
+    },
+    {
+        "id": 1000,
+        "name": "Hip-hop"
+    },
+    {
+        "id": 1100,
+        "name": "House"
+    },
+    {
+        "id": 1200,
+        "name": "Indie"
+    },
+    {
+        "id": 1300,
+        "name": "Jazz"
+    },
+    {
+        "id": 1400,
+        "name": "Metal"
+    },
+    {
+        "id": 1500,
+        "name": "Pop"
+    },
+    {
+        "id": 1600,
+        "name": "Punk"
+    },
+    {
+        "id": 1700,
+        "name": "R&b"
+    },
+    {
+        "id": 1800,
+        "name": "Rock"
+    },
+    {
+        "id": 1900,
+        "name": "Ska"
+    },
+    {
+        "id": 2000,
+        "name": "Techno"
+    },
+    {
+        "id": 2100,
+        "name": "Trance"
+    },
+    {
+        "id": 2200,
+        "name": "World music"
+    },
+    {
+        "id": 2300,
+        "name": "Acoustic"
+    },
+    {
+        "id": 2400,
+        "name": "Alternative"
+    },
+    {
+        "id": 2500,
+        "name": "Beatbox"
+    },
+    {
+        "id": 2600,
+        "name": "Trash"
+    },
+    {
+        "id": 2700,
+        "name": "Folk"
+    },
+    {
+        "id": 2800,
+        "name": "Heavy Metal"
+    },
+    {
+        "id": 2900,
+        "name": "Balada"
+    },
+    {
+        "id": 3000,
+        "name": "Country"
+    }
+]
