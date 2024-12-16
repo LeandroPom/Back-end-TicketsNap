@@ -21,9 +21,9 @@ module.exports = async (identifier, updates) => {
     }
 
     // **Paso 3: Validar estado del usuario**
-    if (!user.state) {
-      throw { status: 400, message: 'La cuenta del usuario está deshabilitada y no se puede editar.' };
-    }
+    // if (user.disabled) {
+    //   throw { status: 400, message: 'La cuenta del usuario está deshabilitada y no se puede editar.' };
+    // }
 
     // **Paso 4: Validar valores únicos (email, phone)**
     if (updates.email && updates.email !== user.email) {

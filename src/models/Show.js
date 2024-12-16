@@ -16,10 +16,6 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        price: {
-            type: DataTypes.FLOAT,
-            allowNull: false // Precio del ticket obligatorio
-        },
         artists: {
             type: DataTypes.ARRAY(DataTypes.STRING),
             allowNull: false

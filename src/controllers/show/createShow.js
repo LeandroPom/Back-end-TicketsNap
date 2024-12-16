@@ -20,7 +20,7 @@ const isValidTimeRange = (start, end) => {
   );
 };
 
-module.exports = async (name, artists, genre, locationName, presentation, description, coverImage, price) => {
+module.exports = async (name, artists, genre, locationName, presentation, description, coverImage) => {
   // Validar campos obligatorios
   if (!name || name.length > 125) {
     throw { code: 400, message: 'Name is required and must not exceed 125 characters' };
@@ -30,9 +30,6 @@ module.exports = async (name, artists, genre, locationName, presentation, descri
   }
   if (!genre || !Array.isArray(genre) || genre.length === 0) {
     throw { code: 400, message: 'Genre must be a non-empty array' };
-  }
-  if (!price || price < 0) {
-    throw { code: 400, message: 'Price must be a positive number' };
   }
   if (!presentation || !Array.isArray(presentation) || presentation.length === 0) {
     throw { code: 400, message: 'Presentation must be a non-empty array of objects' };
@@ -83,7 +80,6 @@ module.exports = async (name, artists, genre, locationName, presentation, descri
     presentation,
     description: description || null,
     coverImage: coverImage || null,
-    price,
   });
 
   return newShow.dataValues;

@@ -3,11 +3,11 @@ const createPlace = require('../../controllers/place/createPlace');
 
 module.exports = async (req, res) => {
 
-  const { name, address, capacity } = req.body;
+  const { name, address } = req.body;
 
   try {
 
-    const newPlace = await createPlace(name, address, capacity);
+    const newPlace = await createPlace(name, address);
 
     console.log('Place created successfully:', newPlace);
     res.status(201).json(newPlace);

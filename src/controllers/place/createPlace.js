@@ -1,16 +1,13 @@
 // controllers/place/createPlace.js
 const { Place } = require('../../db');
 
-module.exports = async (name, address, capacity) => {
+module.exports = async (name, address) => {
   // Validar campos obligatorios
   if (!name || typeof name !== 'string' || name.trim() === '') {
     throw { code: 400, message: 'Name is required and must be a valid string' };
   }
   if (!address || typeof address !== 'string' || address.trim() === '') {
     throw { code: 400, message: 'Address is required and must be a valid string' };
-  }
-  if (!capacity || typeof capacity !== 'number' || capacity < 0) {
-    throw { code: 400, message: 'Capacity is required and must be a non-negative number' };
   }
 
   // Normalizar datos
@@ -29,7 +26,6 @@ module.exports = async (name, address, capacity) => {
   const newPlace = await Place.create({
     name: normalizedName,
     address: normalizedAddress,
-    capacity,
   });
 
   // Devolver los datos creados

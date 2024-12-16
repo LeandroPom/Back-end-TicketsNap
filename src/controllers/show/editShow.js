@@ -12,14 +12,6 @@ module.exports = async (id, updates) => {
         // Paso 2: Validar y aplicar las actualizaciones
         const updatedFields = {};
 
-        // Validar y actualizar `price`
-        if (updates.price !== undefined) {
-            if (updates.price < 0) {
-                throw { code: 400, message: 'El precio no puede ser un número negativo.' };
-            }
-            updatedFields.price = updates.price;
-        }
-
         // Validar y actualizar `presentation`
         if (updates.presentation !== undefined) {
             if (!Array.isArray(updates.presentation)) {

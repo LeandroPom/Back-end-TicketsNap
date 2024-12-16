@@ -16,7 +16,7 @@ module.exports = async (id) => {
         },
         {
           model: Place,
-          attributes: ['id', 'capacity', 'address'],
+          attributes: ['id', 'address'],
         },
       ],
     });
