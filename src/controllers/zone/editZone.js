@@ -46,15 +46,15 @@ module.exports = async (identifier, updates) => {
     }
 
     // **Paso 4: Validar reglas dependientes**
-    if (typeof updatedFields.generalTicket !== 'undefined') {
-      const { generalTicket, location } = { ...zone.toJSON(), ...updatedFields };
-      if (generalTicket && !location.generalPrice) {
-        throw new Error('Cuando "generalTicket" es true, "location.generalPrice" debe estar definido.');
-      }
-      if (!generalTicket && !location.rowPrice) {
-        throw new Error('Cuando "generalTicket" es false, "location.rowPrice" debe estar definido.');
-      }
-    }
+    // if (typeof updatedFields.generalTicket !== 'undefined') {
+    //   const { generalTicket, location } = { ...zone.toJSON(), ...updatedFields };
+    //   if (generalTicket && !location.generalPrice) {
+    //     throw new Error('Cuando "generalTicket" es true, "location.generalPrice" debe estar definido.');
+    //   }
+    //   if (!generalTicket && !location.rowPrice) {
+    //     throw new Error('Cuando "generalTicket" es false, "location.rowPrice" debe estar definido.');
+    //   }
+    // }
 
     // **Paso 5: Aplicar actualizaciones a la zona y guardar en la base de datos**
     await zone.update(updatedFields);
