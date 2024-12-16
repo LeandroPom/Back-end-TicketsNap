@@ -5,11 +5,6 @@ module.exports = async (req, res) => {
   // **Paso 1: Extraer datos del cuerpo de la solicitud**
   const { id, zoneName, updates } = req.body;
 
-    // if (!req.user.isAdmin) {
-    //   return res.status(403).json({ error: 'No tienes permisos para realizar esta acción.' });
-    // }
-
-
   // **Paso 2: Validar que se envíe al menos un identificador**
   if (!id && !zoneName) {
     return res.status(400).json({

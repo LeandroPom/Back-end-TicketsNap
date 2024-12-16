@@ -13,7 +13,7 @@ module.exports = async (name) => {
       where: {
         name: { [Op.like]: `%${name}%` } // Búsqueda parcial y case-sensitive
       },
-      attributes: ['id', 'state', 'name', 'address', 'capacity'], // Campos específicos
+      attributes: ['id', 'state', 'name', 'address'], // Campos específicos
     });
 
     // Si no se encuentran resultados, lanzar un mensaje

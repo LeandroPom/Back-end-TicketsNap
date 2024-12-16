@@ -23,11 +23,6 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING, 
             allowNull: false 
             // Dirección de la ubicación, opcional
-        },
-        capacity: {
-            type: DataTypes.INTEGER, 
-            allowNull: false 
-            // Capacidad máxima del establecimiento, obligatorio
         }
     }, {
         timestamps: false, 

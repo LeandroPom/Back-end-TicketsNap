@@ -1,4 +1,3 @@
-// Importar el modelo Zone desde la base de datos
 const { Zone } = require('../../db');
 
 module.exports = async (identifier, updates) => {
@@ -28,41 +27,41 @@ module.exports = async (identifier, updates) => {
       updatedFields.zoneName = updates.zoneName.charAt(0).toUpperCase() + updates.zoneName.slice(1).toLowerCase();
     }
 
-    // **Actualizar los seats si se proporcionan**
-    if (updates.seats) {
-      // Mapa de los asientos actuales para facilitar la comparación
-      const currentSeats = zone.seats.reduce((map, seat) => {
-        map[seat.id] = seat;
-        return map;
-      }, {});
-
-      // Iterar sobre los asientos enviados en updates
-      const updatedSeats = updates.seats.map((seat) => {
-        if (currentSeats[seat.id]) {
-          // Si el asiento existe, combinar propiedades existentes y nuevas
-          return { ...currentSeats[seat.id], ...seat };
-        } else {
-          // Si el asiento es nuevo, agregarlo
-          return seat;
-        }
-      });
-
-      // Validar que no haya IDs duplicados
-      const seatIds = updatedSeats.map((seat) => seat.id);
-      if (new Set(seatIds).size !== seatIds.length) {
-        throw new Error('No se permiten asientos con IDs duplicados.');
-      }
-
-      updatedFields.seats = updatedSeats;
+    // **Actualizar generalTicket si se proporciona**
+    if (typeof updates.generalTicket !== 'undefined') {
+      updatedFields.generalTicket = updates.generalTicket;
     }
 
-    // **Paso 4: Aplicar actualizaciones a la zona y guardar en la base de datos**
+    // **Actualizar presentation si se proporciona**
+    if (updates.presentation) {
+      updatedFields.presentation = updates.presentation;
+    }
+
+    // **Actualizar location si se proporciona**
+    if (updates.location) {
+      if (typeof updates.location !== 'object') {
+        throw new Error('El campo "location" debe ser un objeto válido.');
+      }
+      updatedFields.location = updates.location;
+    }
+
+    // **Paso 4: Validar reglas dependientes**
+    if (typeof updatedFields.generalTicket !== 'undefined') {
+      const { generalTicket, location } = { ...zone.toJSON(), ...updatedFields };
+      if (generalTicket && !location.generalPrice) {
+        throw new Error('Cuando "generalTicket" es true, "location.generalPrice" debe estar definido.');
+      }
+      if (!generalTicket && !location.rowPrice) {
+        throw new Error('Cuando "generalTicket" es false, "location.rowPrice" debe estar definido.');
+      }
+    }
+
+    // **Paso 5: Aplicar actualizaciones a la zona y guardar en la base de datos**
     await zone.update(updatedFields);
 
-    // **Paso 5: Retornar la zona actualizada**
+    // **Paso 6: Retornar la zona actualizada**
     console.log(`Zona actualizada exitosamente: ${zone.zoneName}`);
     return zone;
-
   } catch (error) {
     // **Manejo de errores**
     console.error('Error al actualizar la zona:', error.message);
