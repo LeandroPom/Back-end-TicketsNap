@@ -60,13 +60,13 @@ module.exports = (sequelize) => {
                 if (
                   !row.row || 
                   (row.rowPrice == null && division.generalPrice == null) ||
-                  !Array.isArray(row.seat)
+                  !Array.isArray(row.seats)
                 ) {
-                  throw new Error('Each row must include a row number, rowPrice/generalPrice, and a seat array.');
+                  throw new Error('Each row must include a row number, rowPrice/generalPrice, and a seats array.');
                 }
-                row.seat.forEach((seat) => {
-                  if (!seat.id || typeof seat.x !== 'number' || typeof seat.y !== 'number') {
-                    throw new Error('Each seat must have id, x, and y coordinates.');
+                row.seats.forEach((seats) => {
+                  if (!seats.id || typeof seats.x !== 'number' || typeof seats.y !== 'number') {
+                    throw new Error('Each seats must have id, x, and y coordinates.');
                   }
                 });
               });
@@ -79,13 +79,13 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: [],
         validate: {
-          validateSeats(value) {
+          validateSeatss(value) {
             if (!Array.isArray(value)) {
               throw new Error('Seats must be an array.');
             }
-            value.forEach((seat) => {
-              if (!seat.id || typeof seat.x !== 'number' || typeof seat.y !== 'number' || typeof seat.taken !== 'boolean') {
-                throw new Error('Each seat must have id, x, y, and taken fields.');
+            value.forEach((seats) => {
+              if (!seats.id || typeof seats.x !== 'number' || typeof seats.y !== 'number' || typeof seats.taken !== 'boolean') {
+                throw new Error('Each seats must have id, x, y, and taken fields.');
               }
             });
           },
