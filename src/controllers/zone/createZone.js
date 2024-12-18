@@ -48,16 +48,16 @@ module.exports = async (zoneName, generalTicket, presentation, location) => {
         if (
           !row.row ||
           (generalTicket === false && typeof row.rowPrice !== 'number') ||
-          !Array.isArray(row.seat)
+          !Array.isArray(row.seats)
         ) {
           throw new Error(
             'Cada "row" debe tener un número, un precio de fila si "generalTicket" es falso, y un arreglo de asientos.'
           );
         }
 
-        row.seat.forEach((seat) => {
-          if (!seat.id || typeof seat.x !== 'number' || typeof seat.y !== 'number') {
-            throw new Error('Cada "seat" debe tener un ID, coordenadas "x" y "y".');
+        row.seats.forEach((seats) => {
+          if (!seats.id || typeof seats.x !== 'number' || typeof seats.y !== 'number') {
+            throw new Error('Cada "seats" debe tener un ID, coordenadas "x" y "y".');
           }
         });
       });
@@ -72,8 +72,8 @@ module.exports = async (zoneName, generalTicket, presentation, location) => {
     // Agregar propiedad `taken` a cada asiento
     location.forEach((division) => {
       division.rows.forEach((row) => {
-        row.seat.forEach((seat) => {
-          seat.taken = false; // Todos los asientos empiezan como no reservados
+        row.seats.forEach((seats) => {
+          seats.taken = false; // Todos los asientos empiezan como no reservados
         });
       });
     });
