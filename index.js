@@ -4,8 +4,9 @@ const { conn } = require('./src/db.js');
 const PORT = process.env.PORT || 3001;
 const loadSeeds = require("./src/scripts/loadSeeds.js")
 
+
 conn.sync({ force: true }).then(() => {
-loadSeeds()
+loadSeeds();
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 })
