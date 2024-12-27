@@ -5,6 +5,7 @@ const tagRouter = require('./tag.routes');
 const placeRouter = require('./place.routes');
 const zoneRouter = require('./zone.routes');
 const analiticsRouter = require('./analitics.routes');
+const templateRouter = require('./template.routes');
 
 
 
@@ -23,6 +24,7 @@ router.use('/shows', showRouter);
 router.use('/tags', tagRouter);
 router.use('/places', placeRouter);
 router.use('/zones', zoneRouter);
+router.use('/templates', templateRouter);
 
 
 module.exports = router;
