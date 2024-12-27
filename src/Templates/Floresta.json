@@ -1,6 +1,6 @@
 {
-  "id":0,
-  "zoneName": "templateFloresta",
+  "showId":0,
+  "isTemplate": true,
   "generalTicket": true,
   "presentation": {
     "date": "2025-01-18",
@@ -13,7 +13,7 @@
   "location": [
     {
       "division": "Preferencial",
-      "general Price": 500,
+      "generalPrice": 500,
       "rows": [
         {
           "row": 1,
@@ -2479,7 +2479,7 @@
     },
     {
       "division": "Vip",
-      "general Price": 500,
+      "generalPrice": 500,
       "rows": [
         {
           "row": 1,
@@ -4945,7 +4945,7 @@
     },
     {
       "division": "Gold",
-      "general Price": 500,
+      "generalPrice": 500,
       "rows": [
         {
           "row": 1,
@@ -7411,7 +7411,7 @@
     },
     {
       "division": "Platea Sur",
-      "general Price": 300,
+      "generalPrice": 300,
       "rows": [
         {
           "row": 1,
@@ -9127,7 +9127,7 @@
     },
     {
       "division": "Platea Norte",
-      "general Price": 300,
+      "generalPrice": 300,
       "rows": [
         {
           "row": 1,
@@ -10843,7 +10843,7 @@
     },
     {
       "division": "Tribunas Generales",
-      "general Price": 300,
+      "generalPrice": 300,
       "space": 600,
       "remainingPlaces":600,
       "occupied": 0

@@ -7,9 +7,14 @@ module.exports = (sequelize) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    zoneName: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    isTemplate: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+      // Indica si el regisdtro cargado es una plantilla
+    },
+    showId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     generalTicket: {
       type: DataTypes.BOOLEAN,
@@ -93,11 +98,11 @@ module.exports = (sequelize) => {
               }
             }
             if (
-              typeof division['general Price'] !== 'number' ||
-              division['general Price'] <= 0
+              typeof division['generalPrice'] !== 'number' ||
+              division['generalPrice'] <= 0
             ) {
               throw new Error(
-                'La propiedad "general Price" debe ser un número positivo en todas las divisiones.'
+                'La propiedad "generalPrice" debe ser un número positivo en todas las divisiones.'
               );
             }
           });
