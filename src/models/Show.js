@@ -34,7 +34,7 @@ module.exports = (sequelize) => {
         },
         location: {
             type: DataTypes.JSON,
-            allowNull: false
+            allowNull: true
         },
         presentation: {
             type: DataTypes.ARRAY(DataTypes.JSON),
