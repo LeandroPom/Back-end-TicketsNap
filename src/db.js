@@ -61,5 +61,6 @@ Place.belongsToMany(Show, {through:'show_place' });
 
 module.exports = {
   ...sequelize.models, // Exporta todos los modelos creados en Sequelize.
-  conn: sequelize,     // Exporta la conexión a la base de datos.
+  conn: sequelize,  // Exporta la conexión a la base de datos.
+  sequelize     
 };

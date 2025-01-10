@@ -39,6 +39,11 @@ module.exports = async ({ showId, updates, templateName }) => {
       ...updates.presentation,
     };
 
+    // Actualizar el campo generalTicket si viene en updates
+    if (updates.generalTicket !== undefined) {
+      jsonTemplate.generalTicket = updates.generalTicket;
+    }
+
     // Actualizar divisiones y filas dentro de `location`
     jsonTemplate.location = jsonTemplate.location.map((division) => {
       // Buscar coincidencias en `updates.location`
