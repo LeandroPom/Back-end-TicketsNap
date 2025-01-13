@@ -2,7 +2,7 @@ const sellTicket = require('../../controllers/ticket/sellTicket');
 
 module.exports = async (req, res) => {
   try {
-    const { showId, zoneId, division, row, seatId, price, userId, user } = req.body;
+    const { showId, zoneId, division, row, seatId, price, name, dni, mail, phone, userId, user } = req.body;
 
     // // Verificar si el usuario tiene la propiedad cashier: true
     // const user = await User.findByPk(userId); // Línea comentada si no se conecta aún con User
@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     }
 
     // Llamar al controlador y devolver la respuesta
-    const response = await sellTicket(showId, zoneId, division, row, seatId, price, userId);
+    const response = await sellTicket(showId, zoneId, division, row, seatId, price, name, dni, mail, phone, userId);
 
     return res.status(201).json(response);
   } catch (error) {
