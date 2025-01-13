@@ -1,7 +1,7 @@
 const { Ticket, Show, Zone } = require('../../db');
 const filterZone = require('../../controllers/zone/filterZone');
 
-module.exports = async (showId, zoneId, division, row, seatId, price, userId) => {
+module.exports = async (showId, zoneId, division, row, seatId, price, name, dni, mail, phone, userId) => {
   try {
     // **Paso 1: Validar Show**
     const show = await Show.findByPk(showId);
@@ -84,6 +84,10 @@ module.exports = async (showId, zoneId, division, row, seatId, price, userId) =>
       row,
       seat: seatId,
       price,
+      name: name, 
+      dni: dni, 
+      mail: mail,
+      phone: phone
       // qrCode: 'QR_CODE_GENERATION_PENDING'
     });
 

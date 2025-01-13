@@ -70,6 +70,25 @@ module.exports = (sequelize) => {
         allowNull: true,
         // Código QR almacenado como texto o base64; marcado opcional hasta implementación
       },
+      name: {
+        type: DataTypes.STRING, 
+        allowNull: true 
+        // Nombre obligatorio
+      },
+      dni: {
+          type: DataTypes.INTEGER,
+          allowNull: true 
+      },
+      mail: {
+          type: DataTypes.STRING,
+          allowNull: true,
+          // unique: true
+          // Dirección de correo electrónico (debe ser único y es obligatorio)
+      },
+      phone: {
+          type: DataTypes.STRING,
+          allowNull: true
+      }
     },
     {
       timestamps: false,
