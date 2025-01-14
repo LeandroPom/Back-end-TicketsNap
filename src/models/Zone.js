@@ -88,11 +88,6 @@ module.exports = (sequelize) => {
                   'La propiedad "space" debe ser un número positivo para divisiones sin filas.'
                 );
               }
-              if (typeof division.remainingPlaces !== 'number' || division.remainingPlaces < 0) {
-                throw new Error(
-                  'La propiedad "remainingPlaces" debe ser un número no negativo.'
-                );
-              }
               if (typeof division.occupied !== 'number' || division.occupied < 0) {
                 throw new Error('La propiedad "occupied" debe ser un número no negativo.');
               }
