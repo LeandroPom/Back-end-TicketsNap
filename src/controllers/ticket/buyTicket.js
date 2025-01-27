@@ -1,5 +1,6 @@
 const { Ticket, Show, Zone } = require('../../db');
 const filterZone = require('../../controllers/zone/filterZone');
+const payment = require('../mercadoPago/payment')
 
 module.exports = async (showId, zoneId, division, row, seatId, price, name, dni, mail, phone, userId) => {
   try {
@@ -73,42 +74,15 @@ module.exports = async (showId, zoneId, division, row, seatId, price, name, dni,
       if (Number(price) !== validPrice) {
         throw new Error(`El precio ingresado (${price}) no coincide con el precio registrado (${validPrice}).`);
       }
-
-      // Marcar el asiento como ocupado
-      updatedLocation = updatedLocation.map(div => {
-        if (div.division === division) {
-          div.rows = div.rows.map(r => {
-            if (r.row === row) {
-              r.seats = r.seats.map(seat => {
-                if (seat.id === seatId) {
-                  return { ...seat, taken: true };
-                }
-                return seat;
-              });
-            }
-            return r;
-          });
-        }
-        return div;
-      });
-
-      rowValue = row;
-      seatValue = seatId;
     }
 
-    // **Paso 6: Actualizar la zona en la base de datos (única actualización)**
-    await Zone.update(
-      { location: updatedLocation },
-      { where: { id: zoneId } }
-    );
-
-    // **Paso 7: Crear el Ticket (única creación)**
+    // **Paso 6: Crear el Ticket (única creación)**
     const newTicket = await Ticket.create({
       userId,
       zoneId,
       showId,
       division,
-      state: true,
+      state: false,
       location: "",
       date: zone.presentation.date,
       function: zone.presentation.performance,
@@ -122,11 +96,14 @@ module.exports = async (showId, zoneId, division, row, seatId, price, name, dni,
       // qrCode: 'QR_CODE_GENERATION_PENDING'
     });
 
-    // **Paso 8: Retornar el Ticket creado**
-    return newTicket;
+    console.log(newTicket.id, name, mail, phone, dni, price, zoneId)
+    const response = await payment(newTicket.id, name, mail, phone, dni, price, zoneId)
+
+    // **Paso 7: Retornar response**
+    return response;
 
   } catch (error) {
-    console.error(`Error en sellTicketController: ${error.message}`);
+    console.error(`Error en buyTicketController: ${error.message}`);
     throw new Error(error.message);
   }
 };

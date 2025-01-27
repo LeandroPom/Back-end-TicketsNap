@@ -52,12 +52,12 @@ module.exports = (sequelize) => {
       },
       row: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         // Fila asignada para el ticket, opcional
       },
       seat: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         // Asiento asignado para el ticket, opcional
       },
       price: {
