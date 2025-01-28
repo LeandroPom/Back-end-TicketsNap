@@ -1,4 +1,4 @@
-const createPayment = require('../../controllers/payment/createPayment');
+const payment = require('../../controllers/mercadoPago/payment');
 
 module.exports = async (req, res) => {
   try {
@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
     }
 
     // Llamar al controlador de creación de pago
-    const paymentResponse = await createPayment(ticketId, name, email, phone, dni, price, description, payment_method_id);
+    const paymentResponse = await payment(ticketId, name, email, phone, dni, price, description, payment_method_id);
 
     res.status(200).json(paymentResponse);
   } catch (error) {
