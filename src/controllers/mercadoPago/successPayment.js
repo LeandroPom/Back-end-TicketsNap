@@ -18,12 +18,13 @@ module.exports = async (req, res) => {
     };
 
     console.log("✅ Pago exitoso:", successPaymentInfo);
-    
-    activateTicket(paymentData.external_reference)
+
+    const ticket = await activateTicket(paymentData.external_reference)
 
     res.status(200).json({
       message: "Pago exitoso registrado correctamente.",
       paymentData: successPaymentInfo,
+      ticket: ticket
     });
 
   } catch (error) {
