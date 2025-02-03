@@ -5,6 +5,7 @@ const tagRouter = require('./tag.routes');
 const placeRouter = require('./place.routes');
 const zoneRouter = require('./zone.routes');
 const ticketRouter = require('./ticket.routes');
+const mpRouter = require('./payment.routes');
 const analiticsRouter = require('./analitics.routes');
 const templateRouter = require('./template.routes');
 
@@ -26,6 +27,7 @@ router.use('/tags', tagRouter);
 router.use('/places', placeRouter);
 router.use('/zones', zoneRouter);
 router.use('/tickets', ticketRouter);
+router.use('/payments', mpRouter);
 router.use('/templates', templateRouter);
 
 

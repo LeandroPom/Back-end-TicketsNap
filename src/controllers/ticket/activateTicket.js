@@ -12,14 +12,16 @@ module.exports = async (ticketId, zoneId) => {
 
     // Clonamos la ubicación para actualizarla
     let updatedLocation = [...zone.location]; 
+    let rowValue = null;
+    let seatValue = null;
 
     // Marcamos el asiento como ocupado
     updatedLocation = updatedLocation.map(div => {
-      if (div.division === division) {
+      if (div.division === ticket.division) {
         div.rows = div.rows.map(r => {
-          if (r.row === row) {
+          if (r.row === ticket.row) {
             r.seats = r.seats.map(seat => {
-              if (seat.id === seatId) {
+              if (seat.id === ticket.seat) {
                 return { ...seat, taken: true };
               }
               return seat;
@@ -30,8 +32,9 @@ module.exports = async (ticketId, zoneId) => {
       }
       return div;
     });
-    rowValue = row;
-    seatValue = seatId;
+
+    rowValue = ticket.row;
+    seatValue = ticket.seatId;
     
 
     // **Paso 3: Actualizar la zona en la base de datos (única actualización)**
