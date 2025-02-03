@@ -33,7 +33,7 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, descrip
       ],
       payer: {
         name: sanitizedName,
-        email: mail.includes("@") ? mail : "test_user@mail.com", // Corregir si es inválido
+        email: mail,
         identification: {
           type: "DNI",
           number: dni,
@@ -44,20 +44,18 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, descrip
       },
 
       back_urls: {
-        success: `${process.env.BACKEND_URLS}/tickets/payment/success`,
-        failure: `${process.env.BACKEND_URLS}/tickets/payment/failure`,
-        pending: `${process.env.BACKEND_URLS}/tickets/payment/pending`,
+        success: `${process.env.BACKEND_URL_NG}/payments/success`,
+        failure: `${process.env.BACKEND_URL_NG}/payments/failure`,
+        pending: `${process.env.BACKEND_URL_NG}/payments/pending`,
       },
 
       auto_return: "approved", // Retorno automático en pagos aprobados
       
 
-      
+     
+      notification_url: `${process.env.BACKEND_URL_NG}/payments/notification`, // Notificaciones automáticas
 
-      notification_url: `${process.env.FRONT_URL}/tickets/payment/notification`, // Notificaciones automáticas
-
-      external_reference: `${ticketId}_${mail}`, // Referencia única para el ticket
-      
+      external_reference: `ticketId: ${ticketId}, zoneId: ${zoneId}, mail: ${mail}`, // Referencia única para el ticket
 
       payment_methods: {
         excluded_payment_types: [
@@ -73,9 +71,9 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, descrip
 
     return {
       init_point: result.init_point, // URL para realizar el pago
-      sandbox_init_point: result.sandbox_init_point, // URL para realizar el pago en sandbox
       payment_id: result.id, // ID del pago generado
       external_reference: result.external_reference, // refereancias externas 
+      // sandbox_init_point: result.sandbox_init_point, // URL para realizar el pago en sandbox
       // payment_details: result // Objeto completo del pago
     };
 
@@ -88,5 +86,6 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, descrip
     } else {
       throw new Error("Error desconocido al procesar el pago.");
     }
+    
   }
 };
