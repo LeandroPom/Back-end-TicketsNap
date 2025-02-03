@@ -21,11 +21,14 @@ module.exports = async (req, res) => {
 
     const ticket = await activateTicket(paymentData.external_reference)
 
-    res.status(200).json({
-      message: "Pago exitoso registrado correctamente.",
-      paymentData: successPaymentInfo,
-      ticket: ticket
-    });
+    // res.status(200).json({
+    //   message: "Pago exitoso registrado correctamente.",
+    //   paymentData: successPaymentInfo,
+    //   ticket: ticket
+    // });
+
+    // Redirigir a la página principal tras procesar el pago exitoso
+    return res.redirect(302, "http://localhost:3001");
 
   } catch (error) {
     console.error("❌ Error en successPayment:", error);
