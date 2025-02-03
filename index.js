@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 3001;
 const loadSeeds = require("./src/scripts/loadSeeds.js")
 
 
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: false }).then(() => {
 loadSeeds();
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
