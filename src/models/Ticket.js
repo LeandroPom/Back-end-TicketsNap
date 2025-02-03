@@ -41,7 +41,7 @@ module.exports = (sequelize) => {
         // Información de la ubicación como un objeto JSON con "name" y "address"
       },
       date: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false,
         // Fecha y hora de la función asociada al ticket
       },
