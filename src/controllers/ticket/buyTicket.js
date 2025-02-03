@@ -76,6 +76,9 @@ module.exports = async (showId, zoneId, division, row, seatId, price, name, dni,
       }
     }
 
+    rowValue = row;
+    seatValue = seatId;
+
     // **Paso 6: Crear el Ticket (única creación)**
     const newTicket = await Ticket.create({
       userId,

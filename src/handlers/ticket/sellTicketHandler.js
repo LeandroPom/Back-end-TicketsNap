@@ -9,9 +9,9 @@ module.exports = async (req, res) => {
     // if (!user) {
     //   return res.status(404).json({ error: "Usuario no encontrado." });
     // }
-    // if (!user.cashier) {
-    //   return res.status(403).json({ error: "El usuario no tiene permisos de cajero." });
-    // }
+    if (!user.cashier) {
+      return res.status(403).json({ error: "El usuario no tiene permisos de cajero." });
+    }
 
     // Llamar al controlador y devolver la respuesta
     const response = await sellTicket(showId, zoneId, division, row, seatId, price, name, dni, mail, phone, userId);

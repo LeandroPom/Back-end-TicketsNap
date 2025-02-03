@@ -10,10 +10,6 @@ const server = express();
 const corsOptions = {
   origin: '*', // Puedes cambiarlo a un dominio específico si es necesario
   credentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${process.env.MP_ACCESS_TOKEN}`
-  },
   methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
   exposedHeaders: ['Content-Type', 'X-Content-Type-Options'] // Para ciertos navegadores
