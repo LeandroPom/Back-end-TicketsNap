@@ -1,3 +1,5 @@
+require("dotenv").config();
+const QRCode = require('qrcode');
 const { Ticket, Zone } = require('../../db');
 
 module.exports = async (externalReference) => {
@@ -62,7 +64,16 @@ module.exports = async (externalReference) => {
 
     console.log(`🎟️ Ticket con ID ${ticket.id} activado correctamente.`);
 
-    // **Paso 8: Retornar el Ticket activado**
+    // **Paso 8: Generar código QR**
+    const qrUrl = `${process.env.BACKEND_URL}/tickets/useQR/${ticketId}`;
+    const qrCode = await QRCode.toDataURL(qrUrl);
+
+    // **Paso 9: Guardar QR en el ticket**
+    await Ticket.update({ qrCode: qrCode }, { where: { id: ticketId } });
+
+    console.log(`🎟️ QR generado para el Ticket con ID ${ticketId}.`);
+
+    // **Paso 10: Retornar el Ticket activado**
     return ticket;
 
   } catch (error) {

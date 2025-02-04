@@ -1,4 +1,4 @@
-const activateTicket = require('../../controllers/ticket/activateTicket')
+const activateTicket = require('../../controllers/ticket/activateTicket');
 
 module.exports = async (req, res) => {
   try {
