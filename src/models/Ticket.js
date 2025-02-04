@@ -65,11 +65,6 @@ module.exports = (sequelize) => {
         allowNull: false,
         // Precio del ticket, obligatorio
       },
-      qrCode: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        // Código QR almacenado como texto o base64; marcado opcional hasta implementación
-      },
       name: {
         type: DataTypes.STRING, 
         allowNull: true 
@@ -88,6 +83,14 @@ module.exports = (sequelize) => {
       phone: {
           type: DataTypes.STRING,
           allowNull: true
+      },
+      qrCode: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      qrToken: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true, // El QR empieza sin usarse
       }
     },
     {

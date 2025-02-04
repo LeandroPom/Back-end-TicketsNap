@@ -1,3 +1,5 @@
+require("dotenv").config();
+const QRCode = require('qrcode');
 const { Ticket, Show, Zone } = require('../../db');
 const filterZone = require('../../controllers/zone/filterZone');
 
@@ -119,11 +121,36 @@ module.exports = async (showId, zoneId, division, row, seatId, price, name, dni,
       dni,
       mail,
       phone,
-      // qrCode: 'QR_CODE_GENERATION_PENDING'
     });
 
-    // **Paso 8: Retornar el Ticket creado**
-    return newTicket;
+    // **Paso 8: Generar código QR**
+    const qrUrl = `${process.env.BACKEND_URL}/tickets/useQR/${newTicket.id}`;
+    const qrCode = await QRCode.toDataURL(qrUrl);
+
+    // **Paso 9: Guardar QR en el ticket**
+    let TicketQR = await Ticket.update({ qrCode: qrCode }, { where: { id: newTicket.id } });
+
+    console.log(`🎟️ QR generado para el Ticket con ID ${newTicket.id}.`);
+
+    // **Paso 10: Retornar el Ticket creado**
+    return {
+      userId,
+      zoneId,
+      showId,
+      division,
+      state: true,
+      location: "",
+      date: `${new Date(zone.presentation.date).toISOString().split('T')[0]} || ${zone.presentation.time.start} - ${zone.presentation.time.end}`,
+      function: zone.presentation.performance,
+      row: rowValue,
+      seat: seatValue,
+      price,
+      name,
+      dni,
+      mail,
+      phone,
+      qrCode: qrCode,
+    }
 
   } catch (error) {
     console.error(`Error en sellTicketController: ${error.message}`);
