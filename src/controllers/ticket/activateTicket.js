@@ -1,11 +1,12 @@
 require("dotenv").config();
 const QRCode = require('qrcode');
-const { Ticket, Zone } = require('../../db');
+const sendTicketEmail = require("../mailer/sendTicketEmail");
+const { Ticket, Zone, Show } = require('../../db');
 
 module.exports = async (externalReference) => {
   try {
     // **Paso 1: Extraer ticketId, zoneId y mail desde externalReference**
-    const regex = /ticketId:\s*(\d+),\s*zoneId:\s*(\d+),\s*mail:\s*([\w.@]+)/;
+    const regex = /ticketId:\s*(\d+),\s*zoneId:\s*(\d+),\s*showId:\s*(\d+),\s*mail:\s*([\w.@]+)/;
     const match = externalReference.match(regex);
 
     if (!match) {
@@ -14,7 +15,8 @@ module.exports = async (externalReference) => {
 
     const ticketId = parseInt(match[1], 10);
     const zoneId = Number(match[2]); // Convertir zoneId a número explícitamente
-    const mail = match[3];
+    const showId = match[3];
+    const mail = match[4];
 
     // **Paso 2: Validar Ticket**
     const ticket = await Ticket.findByPk(ticketId);
@@ -23,6 +25,10 @@ module.exports = async (externalReference) => {
     // **Paso 3: Validar Zona**
     const zone = await Zone.findByPk(zoneId);
     if (!zone) throw new Error(`La zona con ID "${zoneId}" no existe.`);
+
+    // **Paso 3.5: Validar Show**
+    const show = await Show.findByPk(showId);
+    if (!show) throw new Error(`El show con ID "${showId}" no existe.`);
 
     // **Paso 4: Convertir ticket.row y ticket.seat a números**
     const ticketRow = Number(ticket.row);
@@ -73,7 +79,14 @@ module.exports = async (externalReference) => {
 
     console.log(`🎟️ QR generado para el Ticket con ID ${ticketId}.`);
 
-    // **Paso 10: Retornar el Ticket activado**
+    // **Paso 10: Agregar `showName` temporalmente y enviar el correo**
+    const ticketActive = await Ticket.findByPk(ticketId);
+
+    const ticketWithShowName = { ...ticketActive.toJSON(), showName: show.name };
+    
+    await sendTicketEmail(ticketWithShowName);
+
+    // **Paso 11: Retornar el Ticket activado**
     return ticket;
 
   } catch (error) {

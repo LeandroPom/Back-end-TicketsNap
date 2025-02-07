@@ -86,7 +86,7 @@ module.exports = async (showId, zoneId, division, row, seatId, price, name, dni,
       showId,
       division,
       state: false,
-      location: "",
+      location: `${show.location}`,
       date: `${new Date(zone.presentation.date).toISOString().split('T')[0]} || ${zone.presentation.time.start} - ${zone.presentation.time.end}`,
       function: zone.presentation.performance,
       row: rowValue,
@@ -95,12 +95,11 @@ module.exports = async (showId, zoneId, division, row, seatId, price, name, dni,
       name,
       dni,
       mail,
-      phone,
-      // qrCode: 'QR_CODE_GENERATION_PENDING'
+      phone
     });
 
     console.log(newTicket.id, name, mail, phone, dni, price, zoneId)
-    const response = await payment(newTicket.id, name, mail, phone, dni, price, zoneId)
+    const response = await payment(newTicket.id, name, mail, phone, dni, price, zoneId, showId)
 
     // **Paso 7: Retornar response**
     return response;

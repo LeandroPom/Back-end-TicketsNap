@@ -8,10 +8,10 @@ module.exports = async (req, res) => {
         const ticket = await Ticket.findByPk(id);
 
         if (!ticket || !ticket.qrCode) {
-            return res.status(404).json({ message: 'QR code not found or used' });
+            return res.status(404).json({ message: 'QR code not found' });
         }
 
-        if (ticket.used) {
+        if (!ticket.qrToken) {
             return res.status(400).json({ message: "Este QR ya fue utilizado." });
         }
       

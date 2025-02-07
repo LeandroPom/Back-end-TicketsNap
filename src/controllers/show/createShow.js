@@ -34,13 +34,10 @@ module.exports = async (name, artists, genre, locationName, presentation, descri
   if (!presentation || !Array.isArray(presentation) || presentation.length === 0) {
     throw { code: 400, message: 'Presentation must be a non-empty array of objects' };
   }
+  if (!locationName) {
+    throw { code: 404, message: 'Location must be non-empty' };
+  }
 
-  // Validar la ubicación en la base de datos
-  // const place = await Place.findOne({ where: { name: locationName } });
-  // if (!place) {
-  //   throw { code: 404, message: 'Location not found in the database' };
-  // }
-  // const location = { name: place.name, address: place.address };
 
   // Validar las presentaciones
   presentation.forEach(({ date, performance, time }) => {
@@ -76,7 +73,7 @@ module.exports = async (name, artists, genre, locationName, presentation, descri
     name,
     artists,
     genre: normalizedGenres,
-    // location,
+    location: locationName,
     presentation,
     description: description || null,
     coverImage: coverImage || null,

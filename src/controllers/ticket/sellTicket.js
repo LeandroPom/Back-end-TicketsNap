@@ -2,6 +2,7 @@ require("dotenv").config();
 const QRCode = require('qrcode');
 const { Ticket, Show, Zone } = require('../../db');
 const filterZone = require('../../controllers/zone/filterZone');
+const sendTicketEmail = require('../mailer/sendTicketEmail')
 
 module.exports = async (showId, zoneId, division, row, seatId, price, name, dni, mail, phone, userId) => {
   try {
@@ -111,7 +112,7 @@ module.exports = async (showId, zoneId, division, row, seatId, price, name, dni,
       showId,
       division,
       state: true,
-      location: "",
+      location: `${show.location}`,
       date: `${new Date(zone.presentation.date).toISOString().split('T')[0]} || ${zone.presentation.time.start} - ${zone.presentation.time.end}`,
       function: zone.presentation.performance,
       row: rowValue,
@@ -128,18 +129,17 @@ module.exports = async (showId, zoneId, division, row, seatId, price, name, dni,
     const qrCode = await QRCode.toDataURL(qrUrl);
 
     // **Paso 9: Guardar QR en el ticket**
-    let TicketQR = await Ticket.update({ qrCode: qrCode }, { where: { id: newTicket.id } });
+    await Ticket.update({ qrCode: qrCode }, { where: { id: newTicket.id } });
 
     console.log(`🎟️ QR generado para el Ticket con ID ${newTicket.id}.`);
 
-    // **Paso 10: Retornar el Ticket creado**
-    return {
+    let formatedTicket = {
       userId,
       zoneId,
       showId,
       division,
       state: true,
-      location: "",
+      location: `${show.location}`,
       date: `${new Date(zone.presentation.date).toISOString().split('T')[0]} || ${zone.presentation.time.start} - ${zone.presentation.time.end}`,
       function: zone.presentation.performance,
       row: rowValue,
@@ -150,7 +150,14 @@ module.exports = async (showId, zoneId, division, row, seatId, price, name, dni,
       mail,
       phone,
       qrCode: qrCode,
+      showName:`${show.name}`
     }
+
+    // **Paso 10: Enviar el ticket por correo**
+    await sendTicketEmail(formatedTicket);
+
+    // **Paso 10: Retornar el Ticket creado**
+    return formatedTicket
 
   } catch (error) {
     console.error(`Error en sellTicketController: ${error.message}`);
