@@ -8,7 +8,7 @@ const paginate = require('../middlewares/paginate');
 const login = require('../controllers/user/login');
 
 
-userRouter.get('/', getAllUsers, paginate); // Middleware de paginación aquí
+userRouter.get('/', getAllUsers); // Middleware de paginación aquí
 userRouter.get('/:id', getUserById);
 userRouter.put('/edit', editUser);
 userRouter.post('/login', login);

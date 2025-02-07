@@ -6,7 +6,7 @@ const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 // Configurar Mercado Pago con el Access Token
 const client = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN, options: { timeout: 5000, idempotencyKey: 'abc' } });
 
-module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, description) => {
+module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId, description) => {
     try {
 
     // Ajustar el campo name: eliminar espacios iniciales/finales y reemplazar espacios por "_"
@@ -49,7 +49,7 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, descrip
 
       notification_url: `${process.env.BACKEND_URL_NG}/payments/notification`, // Notificaciones automáticas
 
-      external_reference: `ticketId: ${ticketId}, zoneId: ${zoneId}, mail: ${mail}`, // Referencia única para el ticket
+      external_reference: `ticketId: ${ticketId}, zoneId: ${zoneId}, showId: ${showId}, mail: ${mail}`, // Referencia única para el ticket
 
       payment_methods: {
         excluded_payment_types: [

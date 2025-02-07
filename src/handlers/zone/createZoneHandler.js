@@ -18,6 +18,7 @@ module.exports = async (req, res) => {
       message: 'Zona creada exitosamente',
       zone: newZone,
     });
+    
   } catch (error) {
     res.status(500).json({
       error: 'Error al crear la zona',
