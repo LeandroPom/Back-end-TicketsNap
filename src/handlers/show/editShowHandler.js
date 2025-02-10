@@ -7,7 +7,6 @@ module.exports = async (req, res) => {
     // }
 
     // Paso 2: Extraer datos del cuerpo de la solicitud
-    
     const { id, updates } = req.body;
 
     // Paso 3: Validar que se proporcione un identificador
@@ -33,6 +32,7 @@ module.exports = async (req, res) => {
             message: 'Show actualizado exitosamente',
             show: updatedShow,
         });
+        
     } catch (error) {
         // Paso 7: Manejo de errores
         res.status(500).json({
