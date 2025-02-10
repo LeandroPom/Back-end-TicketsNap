@@ -12,7 +12,7 @@ module.exports = async (ticketData) => {
     doc.pipe(stream);
 
     // **Título**
-    doc.fontSize(24).text("🎟️ Ticket de Entrada", { align: "center" });
+    doc.fontSize(24).text("Ticket de Entrada", { align: "center" });
     doc.moveDown();
 
     // **Detalles del Ticket**
