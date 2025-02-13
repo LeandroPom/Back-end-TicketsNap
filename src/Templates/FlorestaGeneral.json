@@ -1,0 +1,28 @@
+{
+  "showId":0,
+  "isTemplate": true,
+  "presentation": {
+    "date": "2025-01-18",
+    "performance": 1,
+    "time": {
+      "start": "20:00",
+      "end": "21:00"
+    }
+  },
+  "location": [
+
+    {
+      "division": "General",
+      "price": 300,
+      "space": 600,
+      "occupied": 0
+    },
+    {
+      "division": "Vip",
+      "price": 300,
+      "space": 600,
+      "occupied": 0,
+      "hasVip": true
+    }
+  ]
+}
