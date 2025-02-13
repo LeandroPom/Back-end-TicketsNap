@@ -20,7 +20,7 @@ const isValidTimeRange = (start, end) => {
   );
 };
 
-module.exports = async (name, artists, genre, locationName, presentation, description, coverImage) => {
+module.exports = async (name, artists, genre, locationName, presentation, description, coverImage, isGeneral) => {
   // Validar campos obligatorios
   if (!name || name.length > 125) {
     throw { code: 400, message: 'Name is required and must not exceed 125 characters' };
@@ -77,6 +77,7 @@ module.exports = async (name, artists, genre, locationName, presentation, descri
     presentation,
     description: description || null,
     coverImage: coverImage || null,
+    isGeneral: isGeneral || false
   });
 
   return newShow.dataValues;

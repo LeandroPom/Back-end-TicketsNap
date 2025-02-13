@@ -57,7 +57,13 @@ module.exports = (sequelize) => {
                     });
                 }
             }
-        }
+        },
+        isGeneral: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+            // Indica si el regisdtro cargado es un evento sin asientos
+        },
     }, {
         timestamps: false,
         freezeTableName: true
