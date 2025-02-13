@@ -21,8 +21,8 @@ module.exports = async (ticketData) => {
     doc.text(`Fecha: ${ticketData.date}`);
     doc.text(`Función: ${ticketData.function}`);
     doc.text(`División: ${ticketData.division}`);
-    doc.text(`Fila: ${ticketData.row}`);
-    doc.text(`Asiento: ${ticketData.seat}`);
+    if (ticketData.row) doc.text(`Fila: ${ticketData.row}`);
+    if (ticketData.seat) doc.text(`Asiento: ${ticketData.seat}`);
     doc.moveDown();
 
     try {
