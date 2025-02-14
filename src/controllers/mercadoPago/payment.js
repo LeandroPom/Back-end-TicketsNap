@@ -12,6 +12,9 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId,
     // Ajustar el campo name: eliminar espacios iniciales/finales y reemplazar espacios por "_"
     const sanitizedName = name.trim().replace(/\s+/g, "_");
 
+    // **Aplicar el 10% extra al precio**
+    const finalPrice = Number(price) * 1.10; // 🔹 Aumentamos un 10% el precio
+
     const title = "test ticket"
 
     const preference = new Preference(client);
@@ -23,7 +26,7 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId,
         {
           title: title,
           quantity: 1, // Siempre se compra un solo ticket
-          unit_price: Number(price), // Precio unitario
+          unit_price: finalPrice, // Precio unitario
           currency_id: "ARS", // Moneda en pesos argentinos
         },
       ],
