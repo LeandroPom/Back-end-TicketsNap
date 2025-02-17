@@ -1,4 +1,6 @@
+const { Zone } = require('../../db');
 const activateTicket = require('../../controllers/ticket/activateTicket');
+const activateGeneralTicket = require('../../controllers/ticket/activateGeneralTicket');
 
 module.exports = async (req, res) => {
   try {
@@ -17,9 +19,28 @@ module.exports = async (req, res) => {
       status_detail: paymentData.status_detail,
     };
 
+    // **Paso 1: Extraer ticketId, zoneId y mail desde externalReference**
+    const regex = /ticketId:\s*(\d+),\s*zoneId:\s*(\d+),\s*showId:\s*(\d+),\s*mail:\s*([\w.@]+)/;
+    const match = paymentData.external_reference.match(regex);
+
+    if (!match) {
+      throw new Error("Formato incorrecto en external_reference.");
+    }
+
+    const zoneId = Number(match[2]);
+
+    // **Paso 3: Validar Zona**
+    const zone = await Zone.findByPk(zoneId);
+
     console.log("✅ Pago exitoso:", successPaymentInfo);
 
-    const ticket = await activateTicket(paymentData.external_reference)
+    if (zone) {
+      const ticket = await activateTicket(paymentData.external_reference)
+    }
+
+    if (!zone) {
+      const generalTicket = await activateGeneralTicket(paymentData.external_reference)
+    }  
 
     // res.status(200).json({
     //   message: "Pago exitoso registrado correctamente.",
