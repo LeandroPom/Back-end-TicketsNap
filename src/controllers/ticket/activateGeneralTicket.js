@@ -67,7 +67,7 @@ module.exports = async (externalReference) => {
     return ticket;
 
   } catch (error) {
-    console.error(`❌ Error en activateTicketController: ${error.message}`);
+    console.error(`❌ Error en activateGEneralTicketController: ${error.message}`);
     throw new Error(error.message);
   }
 };
