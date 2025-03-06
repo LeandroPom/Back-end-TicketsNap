@@ -8,18 +8,20 @@ module.exports = async (id) => {
 
   try {
     // Buscar el show por ID, incluyendo Tickets y Place
-    const show = await Show.findByPk(id, {
-      include: [
-        {
-          model: Ticket,
-          attributes: ['id', 'row'],
-        },
-        {
-          model: Place,
-          attributes: ['id', 'capacity', 'address'],
-        },
-      ],
-    });
+    const show = await Show.findByPk(id
+    //   ,{
+    //   include: [
+    //     {
+    //       model: Ticket,
+    //       attributes: ['id', 'row'],
+    //     },
+    //     {
+    //       model: Place,
+    //       attributes: ['id', 'address'],
+    //     },
+    //   ],
+    // }
+    );
 
     // Si no se encuentra el Show
     if (!show) {
@@ -27,13 +29,13 @@ module.exports = async (id) => {
     }
 
     // Revisar relaciones con otros modelos y agregar mensajes si faltan
-    if (!show.Tickets || show.Tickets.length === 0) {
-      show.setDataValue('Tickets', { message: 'No tickets found for this show.' });
-    }
+    // if (!show.Tickets || show.Tickets.length === 0) {
+    //   show.setDataValue('Tickets', { message: 'No tickets found for this show.' });
+    // }
 
-    if (!show.Place) {
-      show.setDataValue('Place', { message: 'Place information not available.' });
-    }
+    // if (!show.Place) {
+    //   show.setDataValue('Place', { message: 'Place information not available.' });
+    // }
 
     return show;
   } catch (error) {

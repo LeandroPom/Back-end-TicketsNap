@@ -20,7 +20,7 @@ const isValidTimeRange = (start, end) => {
   );
 };
 
-module.exports = async (name, artists, genre, locationName, presentation, description, coverImage, price) => {
+module.exports = async (name, artists, genre, locationName, presentation, description, coverImage, isGeneral) => {
   // Validar campos obligatorios
   if (!name || name.length > 125) {
     throw { code: 400, message: 'Name is required and must not exceed 125 characters' };
@@ -31,19 +31,13 @@ module.exports = async (name, artists, genre, locationName, presentation, descri
   if (!genre || !Array.isArray(genre) || genre.length === 0) {
     throw { code: 400, message: 'Genre must be a non-empty array' };
   }
-  if (!price || price < 0) {
-    throw { code: 400, message: 'Price must be a positive number' };
-  }
   if (!presentation || !Array.isArray(presentation) || presentation.length === 0) {
     throw { code: 400, message: 'Presentation must be a non-empty array of objects' };
   }
-
-  // Validar la ubicación en la base de datos
-  const place = await Place.findOne({ where: { name: locationName } });
-  if (!place) {
-    throw { code: 404, message: 'Location not found in the database' };
+  if (!locationName) {
+    throw { code: 404, message: 'Location must be non-empty' };
   }
-  const location = { name: place.name, address: place.address };
+
 
   // Validar las presentaciones
   presentation.forEach(({ date, performance, time }) => {
@@ -79,11 +73,11 @@ module.exports = async (name, artists, genre, locationName, presentation, descri
     name,
     artists,
     genre: normalizedGenres,
-    location,
+    location: locationName,
     presentation,
     description: description || null,
     coverImage: coverImage || null,
-    price,
+    isGeneral: isGeneral || false
   });
 
   return newShow.dataValues;

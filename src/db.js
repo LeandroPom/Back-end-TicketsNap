@@ -43,7 +43,7 @@ fs.readdirSync(path.join(__dirname, '/models'))
 modelDefiners.forEach(model => model(sequelize));
 // Itera sobre todos los modelos cargados y los define en la instancia de sequelize.
 
-const { User, Ticket, Show, Place, Zone } = sequelize.models;
+const { User, Ticket, Show, Place, Zone, GeneralZone } = sequelize.models;
 // Extrae los modelos definidos dentro de Sequelize.
 
 // **Relaciones entre modelos**
@@ -61,5 +61,6 @@ Place.belongsToMany(Show, {through:'show_place' });
 
 module.exports = {
   ...sequelize.models, // Exporta todos los modelos creados en Sequelize.
-  conn: sequelize,     // Exporta la conexión a la base de datos.
+  conn: sequelize,  // Exporta la conexión a la base de datos.
+  sequelize     
 };

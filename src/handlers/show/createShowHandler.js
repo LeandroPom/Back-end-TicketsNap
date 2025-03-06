@@ -2,7 +2,7 @@
 const createShow = require('../../controllers/show/createShow');
 
 module.exports = async (req, res) => {
-  const { name, artists, genre, locationName, presentation, description, coverImage, price } = req.body;
+  const { name, artists, genre, locationName, presentation, description, coverImage, isGeneral } = req.body;
 
   try {
     const newShow = await createShow(
@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
       presentation,
       description,
       coverImage,
-      price
+      isGeneral
     );
 
     console.log('Show created successfully:', newShow);

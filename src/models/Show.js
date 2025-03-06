@@ -16,10 +16,6 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        price: {
-            type: DataTypes.FLOAT,
-            allowNull: false // Precio del ticket obligatorio
-        },
         artists: {
             type: DataTypes.ARRAY(DataTypes.STRING),
             allowNull: false
@@ -38,7 +34,7 @@ module.exports = (sequelize) => {
         },
         location: {
             type: DataTypes.JSON,
-            allowNull: false
+            allowNull: true
         },
         presentation: {
             type: DataTypes.ARRAY(DataTypes.JSON),
@@ -61,7 +57,13 @@ module.exports = (sequelize) => {
                     });
                 }
             }
-        }
+        },
+        isGeneral: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+            // Indica si el regisdtro cargado es un evento sin asientos
+        },
     }, {
         timestamps: false,
         freezeTableName: true

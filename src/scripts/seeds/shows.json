@@ -3,7 +3,6 @@
         "id": 100,
         "state": true,
         "name": "Show-1",
-        "price": 93.57,
         "artists": [
             "Artist-14",
             "Artist-27",
@@ -42,7 +41,6 @@
         "id": 200,
         "state": true,
         "name": "Show-2",
-        "price": 62.58,
         "artists": [
             "Artist-35",
             "Artist-11",
@@ -72,7 +70,6 @@
         "id": 300,
         "state": true,
         "name": "Show-3",
-        "price": 50.74,
         "artists": [
             "Artist-34"
         ],
@@ -108,7 +105,6 @@
         "id": 400,
         "state": true,
         "name": "Show-4",
-        "price": 43.88,
         "artists": [
             "Artist-18"
         ],
@@ -144,7 +140,6 @@
         "id": 500,
         "state": true,
         "name": "Show-5",
-        "price": 95.19,
         "artists": [
             "Artist-4",
             "Artist-42"
@@ -174,7 +169,6 @@
         "id": 600,
         "state": true,
         "name": "Show-6",
-        "price": 62.51,
         "artists": [
             "Artist-1",
             "Artist-27"
@@ -203,7 +197,6 @@
         "id": 700,
         "state": true,
         "name": "Show-7",
-        "price": 71.18,
         "artists": [
             "Artist-37",
             "Artist-28",
@@ -250,7 +243,6 @@
         "id": 800,
         "state": true,
         "name": "Show-8",
-        "price": 80.06,
         "artists": [
             "Artist-14",
             "Artist-27"
@@ -288,7 +280,6 @@
         "id": 900,
         "state": true,
         "name": "Show-9",
-        "price": 84.25,
         "artists": [
             "Artist-9"
         ],
@@ -316,7 +307,6 @@
         "id": 1000,
         "state": true,
         "name": "Show-10",
-        "price": 42.33,
         "artists": [
             "Artist-46"
         ],
@@ -359,9 +349,7 @@
     {
         "id": 1100,
         "state": true,
-        "name": "Show-11",
-        "price": 54.0,
-        "artists": [
+        "name": "Show-11",        "artists": [
             "Artist-10",
             "Artist-26",
             "Artist-12"
@@ -390,7 +378,6 @@
         "id": 1200,
         "state": true,
         "name": "Show-12",
-        "price": 99.84,
         "artists": [
             "Artist-22"
         ],
@@ -434,7 +421,6 @@
         "id": 1300,
         "state": true,
         "name": "Show-13",
-        "price": 94.79,
         "artists": [
             "Artist-35",
             "Artist-16",
@@ -481,7 +467,6 @@
         "id": 1400,
         "state": true,
         "name": "Show-14",
-        "price": 85.98,
         "artists": [
             "Artist-34"
         ],
@@ -526,7 +511,6 @@
         "id": 1500,
         "state": true,
         "name": "Show-15",
-        "price": 32.96,
         "artists": [
             "Artist-41"
         ],
@@ -555,7 +539,6 @@
         "id": 1600,
         "state": true,
         "name": "Show-16",
-        "price": 32.98,
         "artists": [
             "Artist-22",
             "Artist-9"
@@ -592,7 +575,6 @@
         "id": 1700,
         "state": true,
         "name": "Show-17",
-        "price": 40.69,
         "artists": [
             "Artist-19",
             "Artist-20"
@@ -638,7 +620,6 @@
         "id": 1800,
         "state": true,
         "name": "Show-18",
-        "price": 28.63,
         "artists": [
             "Artist-18",
             "Artist-21"
@@ -667,7 +648,6 @@
         "id": 1900,
         "state": true,
         "name": "Show-19",
-        "price": 27.15,
         "artists": [
             "Artist-15",
             "Artist-23",
@@ -698,7 +678,6 @@
         "id": 2000,
         "state": true,
         "name": "Show-20",
-        "price": 70.48,
         "artists": [
             "Artist-19",
             "Artist-25",
@@ -727,9 +706,7 @@
     {
         "id": 2100,
         "state": true,
-        "name": "Show-21",
-        "price": 43.8,
-        "artists": [
+        "name": "Show-21",        "artists": [
             "Artist-18",
             "Artist-5"
         ],
@@ -765,7 +742,6 @@
         "id": 2200,
         "state": true,
         "name": "Show-22",
-        "price": 88.23,
         "artists": [
             "Artist-12",
             "Artist-34",
@@ -812,7 +788,6 @@
         "id": 2300,
         "state": true,
         "name": "Show-23",
-        "price": 67.13,
         "artists": [
             "Artist-16",
             "Artist-9",
@@ -859,7 +834,6 @@
         "id": 2400,
         "state": true,
         "name": "Show-24",
-        "price": 42.04,
         "artists": [
             "Artist-16",
             "Artist-35"
@@ -904,7 +878,6 @@
         "id": 2500,
         "state": true,
         "name": "Show-25",
-        "price": 20.78,
         "artists": [
             "Artist-25"
         ],
@@ -933,7 +906,6 @@
         "id": 2600,
         "state": true,
         "name": "Show-26",
-        "price": 71.87,
         "artists": [
             "Artist-50",
             "Artist-24",
@@ -972,7 +944,6 @@
         "id": 2700,
         "state": true,
         "name": "Show-27",
-        "price": 44.04,
         "artists": [
             "Artist-23"
         ],
@@ -1008,7 +979,6 @@
         "id": 2800,
         "state": true,
         "name": "Show-28",
-        "price": 96.39,
         "artists": [
             "Artist-27"
         ],
@@ -1045,7 +1015,6 @@
         "id": 2900,
         "state": true,
         "name": "Show-29",
-        "price": 88.07,
         "artists": [
             "Artist-4",
             "Artist-20"
@@ -1091,7 +1060,6 @@
         "id": 3000,
         "state": true,
         "name": "Show-30",
-        "price": 53.09,
         "artists": [
             "Artist-43"
         ],
