@@ -36,10 +36,14 @@ module.exports = async (req, res) => {
 
     if (zone) {
       const ticket = await activateTicket(paymentData.external_reference)
-    }
 
+      return res.redirect(302, "http://localhost:3000/success");
+    }
+    
     if (!zone) {
       const generalTicket = await activateGeneralTicket(paymentData.external_reference)
+      
+      return res.redirect(302, "http://localhost:3000/general/ticket/success");
     }  
 
     // res.status(200).json({
@@ -49,7 +53,7 @@ module.exports = async (req, res) => {
     // });
 
     // Redirigir a la página principal tras procesar el pago exitoso
-    return res.redirect(302, "http://localhost:3001");
+ 
 
   } catch (error) {
     console.error("❌ Error en successPayment:", error);
