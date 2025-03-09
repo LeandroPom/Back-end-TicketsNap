@@ -19,12 +19,12 @@ module.exports = async (req, res) => {
     });
   }
 
-  // // **Paso 4: Validar permisos de administrador**
-  // if (!req.body.user?.isAdmin) {
-  //   return res.status(403).json({
-  //     error: 'No tienes permisos para realizar esta acción.',
-  //   });
-  // }
+  // **Paso 4: Validar permisos de administrador**
+  if (!req.body.user?.isAdmin) {
+    return res.status(403).json({
+      error: 'No tienes permisos para realizar esta acción.',
+    });
+  }
 
   try {
     // **Paso 5: Llamar al controlador para editar el usuario**

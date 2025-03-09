@@ -58,7 +58,7 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId,
         excluded_payment_types: [
           { id: "ticket" }, // Excluir pagos en efectivo
         ],
-        installments: 1, // Solo una cuota
+        // installments: 1, // Solo una cuota
       },
 
     };

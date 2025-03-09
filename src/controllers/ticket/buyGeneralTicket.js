@@ -60,7 +60,7 @@ module.exports = async (showId, zoneId, division, price, name, dni, mail, phone,
     return response;
 
   } catch (error) {
-    console.error(`Error en buyTicketController: ${error.message}`);
+    console.error(`Error en buyGeneralTicketController: ${error.message}`);
     throw new Error(error.message);
   }
 };

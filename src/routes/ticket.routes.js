@@ -8,6 +8,7 @@ const sellGeneralTicket = require('../handlers/ticket/sellGeneralTicketHandler')
 const cancelTicket = require('../handlers/ticket/cancelTicketHandler');
 const cancelGeneralTicket = require('../handlers/ticket/cancelGeneralTicketHandler');
 const useQR = require('../controllers/ticket/useQR');
+const gift = require('../handlers/ticket/giftTicketHandler');
 
 
 ticketRouter.get('/', getAllTickets);
@@ -18,6 +19,7 @@ ticketRouter.post('/sell/general', sellGeneralTicket);
 ticketRouter.delete('/cancel/:ticketId', cancelTicket);
 ticketRouter.delete('/cancel/general/:ticketId', cancelGeneralTicket);
 ticketRouter.get('/useQR/:id', useQR);
+ticketRouter.get('/gift/:id',gift);
 
 
 
