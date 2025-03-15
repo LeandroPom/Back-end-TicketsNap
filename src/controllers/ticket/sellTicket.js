@@ -125,7 +125,7 @@ module.exports = async (showId, zoneId, division, row, seatId, price, name, dni,
     });
 
     // **Paso 8: Generar código QR**
-    const qrUrl = `${process.env.BACKEND_URL}/tickets/useQR/${newTicket.id}`;
+    const qrUrl = `https://ticketsnap.loca.lt/tickets/useQR/${newTicket.id}`;
     const qrCode = await QRCode.toDataURL(qrUrl);
 
     // **Paso 9: Guardar QR en el ticket**

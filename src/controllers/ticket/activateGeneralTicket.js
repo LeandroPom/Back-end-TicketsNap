@@ -50,8 +50,9 @@ module.exports = async (externalReference) => {
     console.log(`🎟️ Ticket con ID ${ticket.id} activado correctamente.`);
 
     // **Paso 7: Generar código QR**
-    const qrUrl = `${process.env.BACKEND_URL}/tickets/useQR/${ticketId}`;
+    const qrUrl = `https://ticketsnap.loca.lt/tickets/useQR/${ticketId}`;
     const qrCode = await QRCode.toDataURL(qrUrl);
+    
 
     // **Paso 8: Guardar QR en el ticket**
     await Ticket.update({ qrCode: qrCode }, { where: { id: ticketId } });

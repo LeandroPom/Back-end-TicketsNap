@@ -26,44 +26,63 @@ module.exports = async (externalReference) => {
     const zone = await Zone.findByPk(zoneId);
     if (!zone) throw new Error(`La zona con ID "${zoneId}" no existe.`);
 
-    // **Paso 3.5: Validar Show**
+    // **Paso 4: Validar Show**
     const show = await Show.findByPk(showId);
     if (!show) throw new Error(`El show con ID "${showId}" no existe.`);
 
-    // **Paso 4: Convertir ticket.row y ticket.seat a números**
-    const ticketRow = Number(ticket.row);
-    const ticketSeat = Number(ticket.seat);
+    if (ticket.division === "Tribunas Generales") {
 
-    // **Paso 5: Buscar el asiento en la zona y marcarlo como ocupado**
-    let seatUpdated = false;
+      // **Paso 5A: Buscar la división en la zona y actualizar ocupación**
+      const updatedLocation = zone.location.map(div => {
+        if (div.division === ticket.division) {
+          return { ...div, occupied: div.occupied + 1 };
+        }
+        return div;
+      });
 
-    const updatedLocation = zone.location.map(div => {
-      if (div.division === ticket.division) {
-        div.rows = div.rows.map(row => {
-          if (row.row === ticketRow) {  // 🔹 Convertido a Number
-            row.seats = row.seats.map(seat => {
-              if (seat.id === ticketSeat) {  // 🔹 Convertido a Number
-                seatUpdated = true;
-                return { ...seat, taken: true }; // ✅ Marcar asiento como ocupado
-              }
-              return seat;
-            });
-          }
-          return row;
-        });
+      // **Paso 6A: Actualizar la zona en la base de datos**
+      await Zone.update(
+        { location: updatedLocation },
+        { where: { id: zoneId } }
+      );
+
+    } else {
+
+      // **Paso 4B: Convertir ticket.row y ticket.seat a números**
+      const ticketRow = Number(ticket.row);
+      const ticketSeat = Number(ticket.seat);
+
+      // **Paso 5B: Buscar el asiento en la zona y marcarlo como ocupado**
+      let seatUpdated = false;
+
+      const updatedLocation = zone.location.map(div => {
+        if (div.division === ticket.division) {
+          div.rows = div.rows.map(row => {
+            if (row.row === ticketRow) {  // 🔹 Convertido a Number
+              row.seats = row.seats.map(seat => {
+                if (seat.id === ticketSeat) {  // 🔹 Convertido a Number
+                  seatUpdated = true;
+                  return { ...seat, taken: true }; // ✅ Marcar asiento como ocupado
+                }
+                return seat;
+              });
+            }
+            return row;
+          });
+        }
+        return div;
+      });
+
+      if (!seatUpdated) {
+        throw new Error(`No se encontró el asiento con ID "${ticket.seat}" en la fila "${ticket.row}" de la división "${ticket.division}".`);
       }
-      return div;
-    });
 
-    if (!seatUpdated) {
-      throw new Error(`No se encontró el asiento con ID "${ticket.seat}" en la fila "${ticket.row}" de la división "${ticket.division}".`);
+      // **Paso 6B: Actualizar la zona en la base de datos**
+      await Zone.update(
+        { location: updatedLocation },
+        { where: { id: zoneId } }
+      );
     }
-
-    // **Paso 6: Actualizar la zona en la base de datos**
-    await Zone.update(
-      { location: updatedLocation },
-      { where: { id: zoneId } }
-    );
 
     // **Paso 7: Activar el ticket**
     await Ticket.update({ state: true }, { where: { id: ticket.id } });
@@ -83,14 +102,14 @@ module.exports = async (externalReference) => {
     const ticketActive = await Ticket.findByPk(ticketId);
 
     const ticketWithShowName = { ...ticketActive.toJSON(), showName: show.name };
-    
+
     await sendTicketEmail(ticketWithShowName);
 
     // **Paso 11: Retornar el Ticket activado**
     return ticket;
 
   } catch (error) {
-    console.error(`❌ Error en sellTicketController: ${error.message}`);
+    console.error(`❌ Error en activateTicketController: ${error.message}`);
     throw new Error(error.message);
   }
 };

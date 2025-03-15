@@ -14,6 +14,7 @@ const templateRouter = require('./template.routes');
 const router = Router();
 
 
+
 router.use((req, res, next) => {
     console.log(`Solicitud a la ruta: ${req.url}`);
     next();

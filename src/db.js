@@ -30,8 +30,10 @@ const sequelize = NODE_ENV === "production"
 const basename = path.basename(__filename);
 // Obtiene el nombre del archivo actual para evitar incluirlo luego al cargar modelos.
 
+
 const modelDefiners = [];
 // Arreglo donde se almacenarán las definiciones de modelos.
+
 
 fs.readdirSync(path.join(__dirname, '/models'))
   .filter((file) => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js')
