@@ -6,6 +6,7 @@ const pendingPayment = require('../controllers/mercadoPago/pendingPayment');
 const notificationPayment = require('../controllers/mercadoPago/notificationPayment');
 
 
+
 mpRouter.get('/success', successPayment); 
 mpRouter.get('/failure', failurePayment);
 mpRouter.get('/pending', pendingPayment);

@@ -14,8 +14,12 @@ module.exports = async (req, res) => {
         if (!ticket.qrToken) {
             return res.status(400).json({ message: "Este QR ya fue utilizado." });
         }
+      
+        // Marcar el ticket como usado
+        await Ticket.update({ qrToken: false }, { where: { id: id } });
 
-        return res.status(200).json({ message: "Acceso concedido, QR validado correctamente.", ticket });
+
+        return res.status(200).json({ message: "QR utilizado correctamente."});
 
     } catch (error) {
         console.error(error);

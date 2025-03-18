@@ -5,7 +5,6 @@ module.exports = async (req, res) => {
     const { showId, updates, zoneName } = req.body;
 
     const templateName = zoneName
-    // .charAt(0).toUpperCase() + zoneName.slice(1).toLowerCase();
 
     // **Validaciones iniciales de los datos de entrada**
     if (!showId) {

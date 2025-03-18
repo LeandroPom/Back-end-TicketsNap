@@ -11,18 +11,6 @@ async function loadSeeds() {
   try {
     console.log('Cargando datos iniciales en la base de datos...');
 
-    // // Usuarios
-    // const dbUser = await User.findAll();
-    // if (dbUser.length) {
-    //   console.log("existingUseres found");
-    //   return;
-    // }
-
-    // const usersData = JSON.parse(fs.readFileSync(path.join(seedsPath, 'users.json'), 'utf-8'));
-    // for (const userData of usersData) {
-    //   await User.create(userData);
-    // }
-
     // Lugares
     const dbPlace = await Place.findAll();
     if (dbPlace.length) {
@@ -58,18 +46,6 @@ async function loadSeeds() {
     for (const showData of showsData) {
       await Show.create(showData);
     }
-
-    // // Zonas
-    // const dbZone = await Zone.findAll();
-    // if (dbZone.length) {
-    //   console.log("existing Zones found");
-    //   return;
-    // }
-
-    // const zonesData = JSON.parse(fs.readFileSync(path.join(seedsPath, 'zones.json'), 'utf-8'));
-    // for (const zoneData of zonesData) {
-    //   await Zone.create(zoneData);
-    // }
 
     console.log('¡Carga inicial completada!');
   } catch (error) {

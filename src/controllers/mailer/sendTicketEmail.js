@@ -10,7 +10,7 @@ module.exports = async (ticketData) => {
 
     // **Configurar el correo**
     const mailOptions = {
-      from: `"🎟️ TicketNap" <${process.env.MAIL_USER}>`,
+      from: `"🎟️ SOLTICKET" <${process.env.MAIL_USER}>`,
       to: ticketData.mail, // Email del usuario
       subject: "🎟️ Confirmación de Compra - Ticket Adjunto",
       text: `Hola ${ticketData.name},\n\nTu compra se ha realizado con éxito.\nAdjunto encontrarás tu ticket.\n\n¡Disfruta del evento!`,

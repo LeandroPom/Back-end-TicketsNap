@@ -1,4 +1,3 @@
-// const getAllPlaces = require('../controllers/place/getAllPlaces');
 const getAllShows = require('../controllers/show/getAllShows');
 const getAllUsers = require('../controllers/user/getAllUsers');
 const getAllZones = require('../controllers/zone/getAllZones');
@@ -7,13 +6,6 @@ const getAllTickets = require('../controllers/ticket/getAllTickets'
 );
 
 module.exports = async (req, res) => {
-
-      // Validar permisos de administrador**
-  // if (!req.body.user?.isAdmin) {
-  //   return res.status(403).json({
-  //     error: 'No tienes permisos para realizar esta acción.',
-  //   });
-  // }
 
   try {
     // Llamar al controlador para obtener todos datos

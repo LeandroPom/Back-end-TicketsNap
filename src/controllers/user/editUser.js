@@ -1,4 +1,3 @@
-// Importar el modelo User desde la base de datos
 const { User } = require('../../db');
 const hashPassword = require('../user/hashPassword'); // Importar el hasheo
 
@@ -20,11 +19,6 @@ module.exports = async (identifier, updates) => {
     if (!user) {
       throw { status: 404, message: 'No se encontró ningún usuario con el identificador proporcionado.' };
     }
-
-    // **Paso 3: Validar estado del usuario**
-    // if (user.disabled) {
-    //   throw { status: 400, message: 'La cuenta del usuario está deshabilitada y no se puede editar.' };
-    // }
 
     // **Paso 4: Validar valores únicos (email, phone)**
     if (updates.email && updates.email !== user.email) {

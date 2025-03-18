@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
     deleteTicket(paymentData.external_reference)
 
     res.status(200).json({
-      message: "Pago fallido registrado correctamente.",
+      message: "Pago fallido registrado.",
       paymentData: failurePaymentInfo,
     });
   
