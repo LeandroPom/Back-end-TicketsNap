@@ -40,7 +40,7 @@ module.exports = async (ticketData) => {
       fs.writeFileSync(qrFilePath, imageBuffer);
 
       // **Agregar QR al PDF**
-      const qrX = 0; // Posición en X
+      const qrX = 20; // Posición en X
       const qrY = doc.y; // Posición en Y después del texto
       doc.image(qrFilePath, qrX, qrY, { width: 200, height: 200 });
       doc.moveDown();
