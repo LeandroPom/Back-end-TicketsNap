@@ -12,13 +12,16 @@ module.exports = async (ticketData) => {
     doc.pipe(stream);
 
     // **Título**
-    doc.fontSize(24).text("Ticket de Entrada", { align: "left" });
+    doc.fontSize(26).text("Ticket de Entrada", { align: "center" });
     doc.moveDown();
 
     // **Detalles del Ticket**
-    doc.fontSize(16).text(`Show: ${ticketData.showName}`);
-    doc.text(`Ubicación: ${ticketData.location}`);
-    doc.text(`Fecha: ${ticketData.date}`);
+    doc.fontSize(16).text(`Show:`);
+    doc.fontSize(16).text(`* ${ticketData.showName}`);
+    doc.text(`Ubicación:`);
+    doc.text(`* ${ticketData.location}`);
+    doc.text(`Fecha:`);
+    doc.text(`* ${ticketData.date}`);
     doc.text(`Función: ${ticketData.function}`);
     doc.text(`División: ${ticketData.division}`);
     if (ticketData.row) doc.text(`Fila: ${ticketData.row}`);
