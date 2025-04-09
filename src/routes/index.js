@@ -21,16 +21,17 @@ router.use((req, res, next) => {
 });
 
 
-router.use('/analitics', analiticsRouter);
-router.use('/users', userRouter);
-router.use('/shows', showRouter);
-router.use('/tags', tagRouter);
-router.use('/places', placeRouter);
-router.use('/zones', zoneRouter);
-router.use('/tickets', ticketRouter);
-router.use('/payments', mpRouter);
-router.use('/templates', templateRouter);
-router.use('/banners', bannerRouter);
+router.use('/api/analitics', analiticsRouter);
+router.use('/api/users', userRouter);
+router.use('/api/shows', showRouter);
+router.use('/api/tags', tagRouter);
+router.use('/api/places', placeRouter);
+router.use('/api/zones', zoneRouter);
+router.use('/api/tickets', ticketRouter);
+router.use('/api/payments', mpRouter);
+router.use('/api/templates', templateRouter);
+router.use('/api/banners', bannerRouter);
+
 
 
 module.exports = router;
