@@ -12,7 +12,7 @@ module.exports = async (ticketData) => {
     doc.pipe(stream);
 
     // **Título**
-    doc.fontSize(26).text("Ticket de Entrada", { align: "center" });
+    doc.fontSize(26).text("Ticket de Entrada", { align: "left" });
     doc.moveDown();
 
     // **Detalles del Ticket**
@@ -43,7 +43,7 @@ module.exports = async (ticketData) => {
       fs.writeFileSync(qrFilePath, imageBuffer);
 
       // **Agregar QR al PDF**
-      const qrX = 150; // Posición en X
+      const qrX = 30; // Posición en X
       const qrY = doc.y; // Posición en Y después del texto
       doc.image(qrFilePath, qrX, qrY, { width: 200, height: 200 });
       doc.moveDown();

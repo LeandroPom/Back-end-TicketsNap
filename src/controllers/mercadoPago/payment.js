@@ -42,14 +42,14 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId,
       },
 
       back_urls: {
-        success: `${process.env.BACKEND_URL}/payments/success`,
-        failure: `${process.env.BACKEND_URL}/payments/failure`,
-        pending: `${process.env.BACKEND_URL}/payments/pending`,
+        success: `${process.env.BACKEND_URL}/api/payments/success`,
+        failure: `${process.env.BACKEND_URL}/api/payments/failure`,
+        pending: `${process.env.BACKEND_URL}/api/payments/pending`,
       },
 
       auto_return: "approved", // Retorno automático en pagos aprobados
 
-      notification_url: `${process.env.BACKEND_URL}/payments/notification`, // Notificaciones automáticas
+      notification_url: `${process.env.BACKEND_URL}/api/payments/notification`, // Notificaciones automáticas
 
       external_reference: `ticketId: ${ticketId}, zoneId: ${zoneId}, showId: ${showId}, mail: ${mail}`, // Referencia única para el ticket
 

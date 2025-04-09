@@ -8,8 +8,8 @@ const server = express();
 
 // Configura los permisos CORS (ajusta según sea necesario)
 const corsOptions = {
-  origin: ['https://solticket.com/', 'https://www.solticket.com/'], // Puedes cambiarlo a un dominio específico si es necesario
-  credentials: true,
+  origin: '*', // Puedes cambiarlo a un dominio específico si es necesario
+  credentials: false,
   methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
   exposedHeaders: ['Content-Type', 'X-Content-Type-Options'] // Para ciertos navegadores
