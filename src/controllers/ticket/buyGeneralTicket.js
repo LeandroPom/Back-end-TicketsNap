@@ -29,10 +29,10 @@ module.exports = async (showId, zoneId, division, price, name, dni, mail, phone,
     }
 
     // **Paso 6: Actualizar ocupación en location**
-    generalZone.location = generalZone.location.map(div =>
-      div.division === division ? { ...div, occupied: div.occupied + 1 } : div
-    );
-    await generalZone.save();
+     //generalZone.location = generalZone.location.map(div =>
+       //div.division === division ? { ...div, occupied: div.occupied + 1 } : div
+     //);
+     //await generalZone.save();
 
     // **Paso 7: Crear el Ticket**
     const newTicket = await Ticket.create({
