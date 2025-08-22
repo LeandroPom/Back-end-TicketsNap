@@ -1,65 +1,68 @@
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
-const QRCode = require("qrcode");
 
-module.exports = async (ticketData) => {
-  return new Promise(async (resolve, reject) => {
-    const doc = new PDFDocument({ size: "A4", margin: 50 });
-
-    // **Guardar el PDF temporalmente**
-    const filePath = `./temp_${ticketData.id}.pdf`;
-    const stream = fs.createWriteStream(filePath);
-    doc.pipe(stream);
-
-    // **Título**
-    doc.fontSize(26).text("Ticket de Entrada", { align: "left" });
-    doc.moveDown();
-
-    // **Detalles del Ticket**
-    doc.fontSize(16).text(`Show:`);
-    doc.fontSize(16).text(`* ${ticketData.showName}`);
-    doc.text(`Ubicación:`);
-    doc.text(`* ${ticketData.location}`);
-    doc.text(`Fecha:`);
-    doc.text(`* ${ticketData.date}`);
-    doc.text(`Función: ${ticketData.function}`);
-    doc.text(`División: ${ticketData.division}`);
-    if (ticketData.row) doc.text(`Fila: ${ticketData.row}`);
-    if (ticketData.seat) doc.text(`Asiento: ${ticketData.seat}`);
-    doc.moveDown();
-
+module.exports = async (ticketsData = []) => {
+  return new Promise((resolve, reject) => {
     try {
-      // **Generar QR como imagen base64**
-      const qrImageBase64 = ticketData.qrCode;
+      if (!ticketsData.length) {
+        throw new Error("No se proporcionaron tickets para generar el PDF.");
+      }
 
-      // **Eliminar el prefijo "data:image/png;base64,"**
-      const base64Image = qrImageBase64.split(",")[1];
+      const doc = new PDFDocument({ size: "A4", margin: 50 });
 
-      // **Convertir a Buffer**
-      const imageBuffer = Buffer.from(base64Image, "base64");
+      // Nombre archivo único
+      const filePath = `./temp_tickets_${Date.now()}.pdf`;
+      const stream = fs.createWriteStream(filePath);
+      doc.pipe(stream);
 
-      // **Guardar como archivo PNG**
-      const qrFilePath = `./qr_${ticketData.id}.png`;
-      fs.writeFileSync(qrFilePath, imageBuffer);
+      ticketsData.forEach((ticketData, index) => {
+        // ---- Cabecera ----
+        doc.fontSize(28).fillColor("#003366").text("Ticket de Entrada", { align: "center" });
+        doc.moveDown(1.5);
 
-      // **Agregar QR al PDF**
-      const qrX = 30; // Posición en X
-      const qrY = doc.y; // Posición en Y después del texto
-      doc.image(qrFilePath, qrX, qrY, { width: 200, height: 200 });
-      doc.moveDown();
+        // ---- Datos del show ----
+        doc.fontSize(16).fillColor("black");
+        doc.text(`Show: ${ticketData.showName}`, { continued: true });
+        doc.text(`Ubicación: ${ticketData.location}`);
+        doc.text(`Fecha: ${ticketData.date}`);
+        doc.text(`Función: ${ticketData.function}`);
+        doc.moveDown();
 
-      // **Eliminar la imagen QR después de usarla**
-      stream.on("finish", () => {
-        fs.unlinkSync(qrFilePath); // Eliminar QR PNG
-        resolve(filePath); // Retornar la ruta del PDF generado
+        // ---- Zona / Asiento ----
+        doc.text(`Zona: ${ticketData.division}`);
+        doc.text(`Precio: $${ticketData.price}`);
+        if (ticketData.row) doc.text(`Fila: ${ticketData.row}`);
+        if (ticketData.seat) doc.text(`Asiento: ${ticketData.seat}`);
+        doc.moveDown();
+
+        // ---- Comprador ----
+        doc.text(`Nombre: ${ticketData.name}`);
+        doc.text(`DNI: ${ticketData.dni || "N/A"}`);
+        doc.moveDown(2);
+
+        // ---- QR ----
+        if (ticketData.qrCode) {
+          const base64Image = ticketData.qrCode.split(",")[1];
+          const imageBuffer = Buffer.from(base64Image, "base64");
+          const qrSize = 180;
+          const pageWidth = doc.page.width;
+          const qrX = (pageWidth - qrSize) / 2;
+          doc.image(imageBuffer, qrX, doc.y, { width: qrSize, height: qrSize });
+        }
+
+        // Si no es el último ticket, agregamos una nueva página
+        if (index < ticketsData.length - 1) {
+          doc.addPage();
+        }
       });
 
-      stream.on("error", (error) => reject(error));
-    } catch (err) {
-      console.error("Error al generar el QR:", err);
-      reject(err);
-    }
+      doc.end();
 
-    doc.end();
+      stream.on("finish", () => resolve(filePath));
+      stream.on("error", (err) => reject(err));
+    } catch (error) {
+      console.error("Error generando PDF múltiple:", error);
+      reject(error);
+    }
   });
 };
