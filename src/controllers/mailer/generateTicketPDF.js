@@ -45,10 +45,10 @@ module.exports = async (ticketsData = []) => {
           const base64Image = ticketData.qrCode.split(",")[1];
           const imageBuffer = Buffer.from(base64Image, "base64");
           const qrSize = 180;
-          const pageWidth = doc.page.width;
-          const qrX = (pageWidth - qrSize) / 2;
+          const qrX = 0; // siempre desde el margen izquierdo
           doc.image(imageBuffer, qrX, doc.y, { width: qrSize, height: qrSize });
         }
+
 
         // Si no es el último ticket, agregamos una nueva página
         if (index < ticketsData.length - 1) {
