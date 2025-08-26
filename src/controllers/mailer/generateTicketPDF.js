@@ -17,7 +17,7 @@ module.exports = async (ticketsData = []) => {
 
       ticketsData.forEach((ticketData, index) => {
         // ---- Cabecera ----
-        doc.fontSize(28).fillColor("#003366").text("Ticket de Entrada", { align: "center" });
+        doc.fontSize(28).fillColor("#000000ff").text("Ticket de Entrada", { align: "center" });
         doc.moveDown(1.5);
 
         // ---- Datos del show ----
