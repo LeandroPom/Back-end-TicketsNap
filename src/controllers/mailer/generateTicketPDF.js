@@ -22,7 +22,7 @@ module.exports = async (ticketsData = []) => {
 
         // ---- Datos del show ----
         doc.fontSize(16).fillColor("black");
-        doc.text(`Show: ${ticketData.showName}`, { continued: true });
+        doc.text(`Show: ${ticketData.showName}`);
         doc.text(`Ubicación: ${ticketData.location}`);
         doc.text(`Fecha: ${ticketData.date}`);
         doc.text(`Función: ${ticketData.function}`);
