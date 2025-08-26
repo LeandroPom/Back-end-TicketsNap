@@ -4,21 +4,7 @@ module.exports = async () => {
 
   try {
 
-    const shows = await Show.findAll(
-    //   {
-    //   attributes: [
-    //     'id',
-    //     'name',
-    //     'artists',
-    //     'genre',
-    //     'location',
-    //     'presentation',
-    //     'description',
-    //     'coverImage',
-    //     'state',
-    //   ], // Devuelve solo los campos relevantes
-    // }
-  );
+    const shows = await Show.findAll();
 
     return shows;
 

@@ -47,10 +47,11 @@ module.exports = async (externalReference) => {
     // **Paso 6: Activar el ticket**
     await Ticket.update({ state: true }, { where: { id: ticket.id } });
 
+    
     console.log(`🎟️ Ticket con ID ${ticket.id} activado correctamente.`);
 
     // **Paso 7: Generar código QR**
-    const qrUrl = `${process.env.BACKEND_URL}/tickets/useQR/${ticketId}`;
+    const qrUrl = `${process.env.FRONTEND_URL}/tickets/useQR/${ticketId}`;
     const qrCode = await QRCode.toDataURL(qrUrl);
 
     // **Paso 8: Guardar QR en el ticket**
@@ -64,10 +65,10 @@ module.exports = async (externalReference) => {
 
     await sendTicketEmail(ticketWithShowName);
 
-    return ticket;
+    return ticketActive;
 
   } catch (error) {
-    console.error(`❌ Error en activateTicketController: ${error.message}`);
+    console.error(`❌ Error en activateGeneralTicketController: ${error.message}`);
     throw new Error(error.message);
   }
 };

@@ -63,7 +63,7 @@ module.exports = async (showId, zoneId, division, price, name, dni, mail, phone,
     });
 
     // **Paso 8: Generar código QR**
-    const qrUrl = `${process.env.BACKEND_URL}/tickets/useQR/${newTicket.id}`;
+    const qrUrl = `${process.env.FRONTEND_URL}/tickets/useQR/${newTicket.id}`;
     const qrCode = await QRCode.toDataURL(qrUrl);
 
     // **Paso 9: Guardar QR en el ticket**

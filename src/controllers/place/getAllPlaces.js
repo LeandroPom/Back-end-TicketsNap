@@ -1,4 +1,3 @@
-// controllers/place/getAllPlaces.js
 const { Place } = require('../../db');
 
 module.exports = async () => {

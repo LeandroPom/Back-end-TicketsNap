@@ -28,11 +28,11 @@ module.exports = async (showId, zoneId, division, price, name, dni, mail, phone,
       throw new Error(`El precio ingresado (${price}) no coincide con el precio registrado (${validPrice}).`);
     }
 
-    // **Paso 6: Actualizar ocupación en location**
-    generalZone.location = generalZone.location.map(div =>
-      div.division === division ? { ...div, occupied: div.occupied + 1 } : div
-    );
-    await generalZone.save();
+    // // **Paso 6: Actualizar ocupación en location**
+    // generalZone.location = generalZone.location.map(div =>
+    //   div.division === division ? { ...div, occupied: div.occupied + 1 } : div
+    // );
+    // await generalZone.save();
 
     // **Paso 7: Crear el Ticket**
     const newTicket = await Ticket.create({
@@ -60,7 +60,7 @@ module.exports = async (showId, zoneId, division, price, name, dni, mail, phone,
     return response;
 
   } catch (error) {
-    console.error(`Error en buyTicketController: ${error.message}`);
+    console.error(`Error en buyGeneralTicketController: ${error.message}`);
     throw new Error(error.message);
   }
 };

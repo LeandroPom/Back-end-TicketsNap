@@ -1,4 +1,6 @@
-const deleteTicket = require('../../controllers/ticket/deleteTicket')
+// const deleteTicket = require('../../controllers/ticket/deleteTicket')
+// const bulkDeleteTicket = require('../../controllers/ticket/bulkDeleteTicket')
+const { Ticket } = require('../../db');
 
 module.exports = async (req, res) => {
   try {
@@ -9,7 +11,7 @@ module.exports = async (req, res) => {
       console.error("⚠️ Advertencia: Datos de pago incompletos.");
       return res.status(400).json({ error: "Datos de pago incompletos." });
     }
-    
+
     // Guardar los datos en una variable temporal
     const failurePaymentInfo = {
       status: "failure",
@@ -19,13 +21,27 @@ module.exports = async (req, res) => {
     };
     
     console.log("❌ Pago fallido:", failurePaymentInfo);
-    
-    deleteTicket(paymentData.external_reference)
 
-    res.status(200).json({
-      message: "Pago fallido registrado correctamente.",
-      paymentData: failurePaymentInfo,
-    });
+    const regex = /ticketId:\s*([\d,]+),\s*zoneId:\s*(\d+),\s*showId:\s*(\d+),\s*mail:\s*([\w.@]+)/;
+    const match = failurePaymentInfo.external_reference.match(regex);
+    
+    if (!match) {
+      throw new Error("Formato incorrecto en external_reference.");
+    }
+    
+    const ticketIds = match[1].split(",").map(id => parseInt(id.trim(), 10));
+    const ticketArray= ticketIds.map(id => ({ ticketId: id }));
+
+    // 6️⃣ Eliminar tickets
+    for (const { ticketId } of ticketArray) {
+      if (!ticketId) throw new Error("ticketId es obligatorio.");
+
+      await Ticket.destroy({ where: { id: ticketId } });
+
+      console.log(`🗑️ Ticket con ID ${ticketId} eliminado correctamente.`);
+    }
+
+    return res.redirect(302, `${process.env.FRONTEND_URL}/failure`);
   
   } catch (error) {
     console.error("❌ Error en failurePayment:", error);

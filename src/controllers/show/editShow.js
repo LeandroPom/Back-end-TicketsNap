@@ -31,15 +31,6 @@ module.exports = async (id, updates) => {
             updatedFields.presentation = updates.presentation;
         }
 
-        // Validar y actualizar `location`
-        // if (updates.location !== undefined) {
-        //     const place = await Place.findOne({ where: { name: updates.location.name } });
-        //     if (!place) {
-        //         throw { code: 404, message: 'La ubicación proporcionada no existe en la base de datos.' };
-        //     }
-        //     updatedFields.location = updates.location;
-        // }
-
         // Validar y actualizar `genre` (tags)
         if (updates.genre !== undefined) {
             if (!Array.isArray(updates.genre)) {

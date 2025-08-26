@@ -13,12 +13,11 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId,
     const sanitizedName = name.trim().replace(/\s+/g, "_");
 
     // **Aplicar el 10% extra al precio**
-    const finalPrice = Number(price) * 1.10; // 🔹 Aumentamos un 10% el precio
+    const finalPrice = Number(price) * 1.20; // 🔹 Aumentamos un 20% el precio
 
     const title = "test ticket"
 
     const preference = new Preference(client);
-    // const payment = new Payment(client);
 
     // Configurar los datos del cuerpo de la solicitud
     const body = {
@@ -43,14 +42,14 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId,
       },
 
       back_urls: {
-        success: `${process.env.BACKEND_URL_NG}/payments/success`,
-        failure: `${process.env.BACKEND_URL_NG}/payments/failure`,
-        pending: `${process.env.BACKEND_URL_NG}/payments/pending`,
+        success: `${process.env.BACKEND_URL}/api/payments/success`,
+        failure: `${process.env.BACKEND_URL}/api/payments/failure`,
+        pending: `${process.env.BACKEND_URL}/api/payments/pending`,
       },
 
-      auto_return: "approved", // Retorno automático en pagos aprobados
+      // auto_return: "approved", // Retorno automático en pagos aprobados
 
-      notification_url: `${process.env.BACKEND_URL_NG}/payments/notification`, // Notificaciones automáticas
+      notification_url: `${process.env.BACKEND_URL}/api/payments/notification`, // Notificaciones automáticas
 
       external_reference: `ticketId: ${ticketId}, zoneId: ${zoneId}, showId: ${showId}, mail: ${mail}`, // Referencia única para el ticket
 
@@ -58,7 +57,6 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId,
         excluded_payment_types: [
           { id: "ticket" }, // Excluir pagos en efectivo
         ],
-        installments: 1, // Solo una cuota
       },
 
     };
@@ -70,8 +68,6 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId,
       init_point: result.init_point, // URL para realizar el pago
       payment_id: result.id, // ID del pago generado
       external_reference: result.external_reference, // refereancias externas 
-      // sandbox_init_point: result.sandbox_init_point, // URL para realizar el pago en sandbox
-      // payment_details: result // Objeto completo del pago
     };
 
   } catch (error) {

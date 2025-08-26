@@ -1,5 +1,5 @@
-// Importar el modelo User desde la base de datos
 const { User } = require('../../db');
+const hashPassword = require('../user/hashPassword'); // Importar el hasheo
 
 module.exports = async (identifier, updates) => {
   try {
@@ -20,11 +20,6 @@ module.exports = async (identifier, updates) => {
       throw { status: 404, message: 'No se encontró ningún usuario con el identificador proporcionado.' };
     }
 
-    // **Paso 3: Validar estado del usuario**
-    // if (user.disabled) {
-    //   throw { status: 400, message: 'La cuenta del usuario está deshabilitada y no se puede editar.' };
-    // }
-
     // **Paso 4: Validar valores únicos (email, phone)**
     if (updates.email && updates.email !== user.email) {
       const existingEmail = await User.findOne({ where: { email: updates.email } });
@@ -44,10 +39,19 @@ module.exports = async (identifier, updates) => {
     const fieldsToUpdate = { ...updates };
     delete fieldsToUpdate.id; // Eliminar `id` si está presente en updates
 
-    // **Validación para contraseña (preparada para hash futuro)**
+    // **Paso 5: Validar y hashear la contraseña si se actualiza**
     if (fieldsToUpdate.password) {
-      // Requiere agregar bcrypt en el futuro
-      console.log('NOTA: Se puede agregar hash de contraseñas aquí.');
+      if (fieldsToUpdate.password.length < 6 || fieldsToUpdate.password.length > 100) {
+        throw { status: 400, message: "La contraseña debe tener entre 6 y 100 caracteres." };
+      }
+
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+      if (!passwordRegex.test(fieldsToUpdate.password)) {
+        throw { status: 400, message: "La contraseña debe contener al menos una letra y un número." };
+      }
+
+      fieldsToUpdate.password = await hashPassword(fieldsToUpdate.password);
+      console.log("🔒 Contraseña hasheada correctamente.");
     }
 
     await user.update(fieldsToUpdate);
