@@ -77,8 +77,6 @@ module.exports = (sequelize) => {
       mail: {
           type: DataTypes.STRING,
           allowNull: true,
-          // unique: true
-          // Dirección de correo electrónico (debe ser único y es obligatorio)
       },
       phone: {
           type: DataTypes.STRING,

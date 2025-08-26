@@ -9,7 +9,7 @@ const server = express();
 // Configura los permisos CORS (ajusta según sea necesario)
 const corsOptions = {
   origin: '*', // Puedes cambiarlo a un dominio específico si es necesario
-  credentials: true,
+  credentials: false,
   methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
   exposedHeaders: ['Content-Type', 'X-Content-Type-Options'] // Para ciertos navegadores

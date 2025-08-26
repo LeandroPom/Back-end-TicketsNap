@@ -12,6 +12,31 @@ module.exports = async (ticketId) => {
     const zone = await Zone.findByPk(ticket.zoneId);
     if (!zone) throw new Error(`La zona con ID "${ticket.zoneId}" no existe.`);
 
+    // **Paso 3A: Reducir ocupación en la división correspondiente**
+    if (ticket.division === "Tribunas Generales") {
+
+      const updatedLocation = zone.location.map((division) => {
+        if (division.division === ticket.division) {
+          return { ...division, occupied: Math.max(0, division.occupied - 1) };
+        }
+        return division;
+      });
+
+      // **Paso 4A: Actualizar la zona en la base de datos**
+      await Zone.update(
+        { location: updatedLocation },
+        { where: { id: ticket.zoneId } }
+      );
+
+      // **Paso 5A: Actualizar el estado del ticket a 'false'**
+      await Ticket.update(
+        { state: false },
+        { where: { id: ticketId } }
+      );
+
+      return { message: `El ticket con ID "${ticketId}" fue cancelado y el espacio ha sido liberado.` };
+    }
+
     // **Paso 3: Marcar el asiento como disponible (taken: false)**
     const updatedLocation = zone.location.map((division) => {
       if (division.division === ticket.division) {
