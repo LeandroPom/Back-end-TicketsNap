@@ -16,8 +16,8 @@ module.exports = async (name) => {
         const originalLength = Banners.bannerArray.length;
 
         // Filtrar los banners que no coinciden con el name
-        Banners.bannerArray = Banners.bannerArray.filter(
-            banner => banner.name !== name
+       Banners.bannerArray = Banners.bannerArray.filter(
+       banner => banner.name.trim().toLowerCase() !== name.trim().toLowerCase()
         );
 
         if (Banners.bannerArray.length === originalLength) {

@@ -47,7 +47,7 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId,
         pending: `${process.env.BACKEND_URL}/api/payments/pending`,
       },
 
-      auto_return: "approved", // Retorno automático en pagos aprobados
+      // auto_return: "approved", // Retorno automático en pagos aprobados
 
       notification_url: `${process.env.BACKEND_URL}/api/payments/notification`, // Notificaciones automáticas
 
