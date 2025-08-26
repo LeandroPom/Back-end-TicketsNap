@@ -17,12 +17,12 @@ module.exports = async (ticketsData = []) => {
 
       ticketsData.forEach((ticketData, index) => {
         // ---- Cabecera ----
-        doc.fontSize(28).fillColor("#003366").text("Ticket de Entrada", { align: "center" });
+        doc.fontSize(28).fillColor("#000000ff").text("Ticket de Entrada", { align: "center" });
         doc.moveDown(1.5);
 
         // ---- Datos del show ----
         doc.fontSize(16).fillColor("black");
-        doc.text(`Show: ${ticketData.showName}`, { continued: true });
+        doc.text(`Show: ${ticketData.showName}`);
         doc.text(`Ubicación: ${ticketData.location}`);
         doc.text(`Fecha: ${ticketData.date}`);
         doc.text(`Función: ${ticketData.function}`);
