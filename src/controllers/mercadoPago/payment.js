@@ -1,35 +1,72 @@
-require("dotenv").config(); 
+require("dotenv").config();
 const { MercadoPagoConfig, Payment, Preference } = require("mercadopago");
+const { Show } = require("../../db"); // ✅ Importar modelo Show
+
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
-// console.log(MP_ACCESS_TOKEN)
 
 // Configurar Mercado Pago con el Access Token
-const client = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN, options: { timeout: 5000, idempotencyKey: 'abc' } });
+const client = new MercadoPagoConfig({
+  accessToken: MP_ACCESS_TOKEN,
+  options: { timeout: 5000, idempotencyKey: 'abc' }
+});
 
 module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId, description) => {
-    try {
+  try {
 
-    // Ajustar el campo name: eliminar espacios iniciales/finales y reemplazar espacios por "_"
+    /**
+     * -----------------------------------------------------------
+     * 1️⃣ Sanitizar nombre del payer
+     * -----------------------------------------------------------
+     */
     const sanitizedName = name.trim().replace(/\s+/g, "_");
 
-    // **Aplicar el 10% extra al precio**
-    const finalPrice = Number(price) * 1.10; // 🔹 Aumentamos un 10% el precio
 
-    const title = "test ticket"
+    /**
+     * -----------------------------------------------------------
+     * 2️⃣ Recuperar Show desde DB para obtener serviceCharge
+     * -----------------------------------------------------------
+     */
+    const show = await Show.findByPk(showId);
+
+    if (!show) {
+      throw new Error(`Show con id ${showId} no encontrado`);
+    }
+
+
+
+    /**
+     * -----------------------------------------------------------
+     * 3️⃣ Calcular precio final usando serviceCharge (%)
+     * -----------------------------------------------------------
+     */
+
+    const serviceCharge = Number(show.serviceCharge);
+
+    const finalPrice = Number(
+      (Number(price) * (1 + serviceCharge / 100)).toFixed(2)
+    );
+
+
+    const title = "test ticket";
 
     const preference = new Preference(client);
-    // const payment = new Payment(client);
 
-    // Configurar los datos del cuerpo de la solicitud
+
+    /**
+     * -----------------------------------------------------------
+     * 4️⃣ Configuración del cuerpo de la preferencia MP
+     * -----------------------------------------------------------
+     */
     const body = {
       items: [
         {
           title: title,
-          quantity: 1, // Siempre se compra un solo ticket
-          unit_price: finalPrice, // Precio unitario
-          currency_id: "ARS", // Moneda en pesos argentinos
+          quantity: 1,
+          unit_price: finalPrice,
+          currency_id: "ARS",
         },
       ],
+
       payer: {
         name: sanitizedName,
         email: mail,
@@ -43,46 +80,53 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId,
       },
 
       back_urls: {
-        success: `${process.env.BACKEND_URL_NG}/payments/success`,
-        failure: `${process.env.BACKEND_URL_NG}/payments/failure`,
-        pending: `${process.env.BACKEND_URL_NG}/payments/pending`,
+        success: `${process.env.BACKEND_URL_NG}/api/payments/success`,
+        failure: `${process.env.BACKEND_URL_NG}/api/payments/failure`,
+        pending: `${process.env.BACKEND_URL_NG}/api/payments/pending`,
       },
 
-      auto_return: "approved", // Retorno automático en pagos aprobados
+      auto_return: "approved",
 
-      notification_url: `${process.env.BACKEND_URL_NG}/payments/notification`, // Notificaciones automáticas
+      notification_url: `${process.env.BACKEND_URL_NG}/api/payments/notification`,
 
-      external_reference: `ticketId: ${ticketId}, zoneId: ${zoneId}, showId: ${showId}, mail: ${mail}`, // Referencia única para el ticket
+      external_reference: `ticketId: ${ticketId}, zoneId: ${zoneId}, showId: ${showId}, mail: ${mail}`,
 
       payment_methods: {
         excluded_payment_types: [
-          { id: "ticket" }, // Excluir pagos en efectivo
+          { id: "ticket" },
         ],
-        // installments: 1, // Solo una cuota
       },
-
     };
 
-    // Crear la preferencia en Mercado Pago
+
+    /**
+     * -----------------------------------------------------------
+     * 5️⃣ Crear preferencia de pago en MercadoPago
+     * -----------------------------------------------------------
+     */
     const result = await preference.create({ body });
 
+
+    /**
+     * -----------------------------------------------------------
+     * 6️⃣ Retornar datos necesarios para el frontend
+     * -----------------------------------------------------------
+     */
     return {
-      init_point: result.init_point, // URL para realizar el pago
-      payment_id: result.id, // ID del pago generado
-      external_reference: result.external_reference, // refereancias externas 
-      // sandbox_init_point: result.sandbox_init_point, // URL para realizar el pago en sandbox
-      // payment_details: result // Objeto completo del pago
+      init_point: result.init_point,
+      payment_id: result.id,
+      external_reference: result.external_reference,
     };
 
   } catch (error) {
+
     console.error("Error al crear el pago:", error);
 
-    // Mostrar mensaje detallado de error
     if (error.response && error.response.data) {
       throw new Error(`Error al procesar el pago: ${JSON.stringify(error.response.data)}`);
     } else {
       throw new Error("Error desconocido al procesar el pago.");
     }
-    
+
   }
 };

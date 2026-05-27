@@ -2,15 +2,17 @@ const deleteBanner = require('../../controllers/banner/deleteBanner');
 
 module.exports = async (req, res) => {
 
-    const { name } = req.params;
+    const { name, static: isStatic } = req.params;
 
     try {
 
-        if (!name) {
-            throw new Error("El parámetro 'name' es obligatorio.");
+        if (!name || typeof isStatic === "undefined") {
+            throw new Error("name y static son obligatorios.");
         }
 
-        const banner = await deleteBanner(name);
+        const parsedStatic = isStatic === "true";
+
+        const banner = await deleteBanner(name, parsedStatic);
 
         return res.status(200).json(banner);
 

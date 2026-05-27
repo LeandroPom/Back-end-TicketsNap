@@ -1,0 +1,100 @@
+{
+  "showId": 0,
+  "isTemplate": true,
+  "generalTicket": true,
+  "zoneName": "Dinamiczone",
+  "zoneImageUrl": null,
+  "zoneImageWidth": null,
+  "zoneImageHeight": null,
+  "presentation": {
+    "date": "2026-01-01",
+    "time": {
+      "start": "00:00",
+      "end": "01:00"
+    },
+    "performance": 1
+  },
+  "location": [
+    {
+      "division": "goldss",
+      "divisionImageUrl": "https://res.cloudinary.com/dyeknjnsi/image/upload/v1779384825/zona-Gold_co3yqq.png",
+      "divisionImageWidth": 253,
+      "divisionImageHeight": 631,
+      "generalPrice": 0,
+      "rows": [
+        {
+          "row": 1,
+          "rowPrice": 0,
+          "seats": [
+            {
+              "id": 1,
+              "x": 0.5310029644268774,
+              "y": 0.27416798732171155,
+              "taken": false
+            },
+            {
+              "id": 2,
+              "x": 0.7167737154150198,
+              "y": 0.30427892234548337,
+              "taken": false
+            },
+            {
+              "id": 3,
+              "x": 0.5151926877470355,
+              "y": 0.42789223454833597,
+              "taken": false
+            },
+            {
+              "id": 4,
+              "x": 0.3610424901185771,
+              "y": 0.2076069730586371,
+              "taken": false
+            },
+            {
+              "id": 5,
+              "x": 0.693058300395257,
+              "y": 0.13946117274167988,
+              "taken": false
+            },
+            {
+              "id": 6,
+              "x": 0.7207262845849802,
+              "y": 0.25039619651347067,
+              "taken": false
+            },
+            {
+              "id": 7,
+              "x": 0.44009387351778656,
+              "y": 0.10618066561014262,
+              "taken": false
+            },
+            {
+              "id": 8,
+              "x": 0.5310029644268774,
+              "y": 0.15847860538827258,
+              "taken": false
+            },
+            {
+              "id": 9,
+              "x": 0.8195405138339921,
+              "y": 0.17115689381933438,
+              "taken": false
+            },
+            {
+              "id": 10,
+              "x": 0.7325839920948617,
+              "y": 0.08082408874801902,
+              "taken": false
+            },
+            {
+              "id": 11,
+              "x": 0.5626235177865613,
+              "y": 0.06814580031695722,
+              "taken": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

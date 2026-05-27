@@ -1,78 +1,119 @@
+const { Zone } = require('../../db');
 const fs = require('fs');
 const path = require('path');
-const { Zone } = require('../../db');
 
-// **Controlador principal para actualizar o crear una zona**
 module.exports = async ({ showId, updates, templateName }) => {
   try {
-    const filePath = path.join(__dirname, `../../Templates/${templateName}.json`);
+    if (!templateName) {
+      throw new Error('El nombre de la plantilla es obligatorio.');
+    }
+
+    // Normalizar nombre
+    const templateNameNormalized = templateName.toLowerCase();
+    const filePath = path.join(
+      __dirname,
+      `../../Templates/${templateNameNormalized}.json`
+    );
 
     if (!fs.existsSync(filePath)) {
-      throw new Error(`El archivo JSON "${templateName}" no existe.`);
+      throw new Error(
+        `El template base "${templateName}" no existe en Templates/.`
+      );
     }
 
-    const jsonData = fs.readFileSync(filePath, 'utf8');
-    const jsonTemplate = JSON.parse(jsonData);
+    // Leer template base
+    const templateData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-    // Verificar duplicados en base a `date` y `time` de `presentation`
-    const { date, time } = updates.presentation || {};
-    if (!date || !time) {
-      throw new Error('Las propiedades "date" y "time" son obligatorias en presentation.');
+    // Clonar para no modificar el JSON original
+    const zoneData = JSON.parse(JSON.stringify(templateData));
+
+    // Asignar showId y marcar como no plantilla
+    zoneData.showId = showId;
+    zoneData.isTemplate = false;
+
+    // ==============================
+    // Actualizar presentación
+    // ==============================
+    if (updates.presentation) {
+      zoneData.presentation = updates.presentation;
     }
 
-    const existingZone = await Zone.findOne({
-      where: {
-        'presentation.date': date,
-        'presentation.time': time,
-      },
-    });
-
-    if (existingZone) {
-      throw new Error(`Ya existe una zona con la fecha "${date}" y el horario "${time}".`);
+    // ==============================
+    // Actualizar generalTicket
+    // ==============================
+    if (typeof updates.generalTicket === 'boolean') {
+      zoneData.generalTicket = updates.generalTicket;
     }
 
-    // Modificar la plantilla con los datos proporcionados
-    jsonTemplate.showId = showId;
-    jsonTemplate.isTemplate = false; // Asegurar que no se marque como plantilla
-    jsonTemplate.presentation = {
-      ...jsonTemplate.presentation,
-      ...updates.presentation,
-    };
+    // ==============================
+    // Aplicar SOLO precios (merge)
+    // ==============================
+    if (Array.isArray(updates.location)) {
 
-    // Actualizar el campo generalTicket si viene en updates
-    if (updates.generalTicket !== undefined) {
-      jsonTemplate.generalTicket = updates.generalTicket;
-    }
+      updates.location.forEach(updateDiv => {
 
-    // Actualizar divisiones y filas dentro de `location`
-    jsonTemplate.location = jsonTemplate.location.map((division) => {
-      // Buscar coincidencias en `updates.location`
-      const update = updates.location.find((item) => item.division === division.division);
-      if (update) {
-        // Actualizar `generalPrice` si existe
-        division.generalPrice = update.generalPrice || division.generalPrice;
+        const division = zoneData.location.find(
+          d => d.division === updateDiv.division
+        );
 
-        // Actualizar filas si existen en ambas partes
-        if (division.rows && update.rows) {
-          division.rows = division.rows.map((row) => {
-            const rowUpdate = update.rows.find((item) => item.row === row.row);
-            if (rowUpdate) {
-              row.rowPrice = rowUpdate.rowPrice || row.rowPrice;
-            }
-            return row;
-          });
+        if (!division) return;
+
+        // Precio general de división
+        if (typeof updateDiv.generalPrice === 'number') {
+          division.generalPrice = updateDiv.generalPrice;
         }
-      }
-      return division;
-    });
 
-    // Crear nuevo registro en la base de datos
-    const newZone = await Zone.create(jsonTemplate);
+        if (!Array.isArray(updateDiv.rows)) return;
+
+        updateDiv.rows.forEach(updateRow => {
+
+          const row = division.rows.find(
+            r => r.row === updateRow.row
+          );
+
+          if (!row) return;
+
+          // Precio por fila
+          if (typeof updateRow.rowPrice === 'number') {
+            row.rowPrice = updateRow.rowPrice;
+          }
+
+          if (!Array.isArray(updateRow.seats)) return;
+
+          updateRow.seats.forEach(updateSeat => {
+
+            const seat = row.seats.find(
+              s => s.id === updateSeat.id
+            );
+
+            if (!seat) return;
+
+            // 🔥 SOLO actualizamos seatPrice
+            if (typeof updateSeat.seatPrice === 'number') {
+              seat.seatPrice = updateSeat.seatPrice;
+            }
+
+          });
+
+        });
+
+      });
+
+    }
+
+    // ==============================
+    // Guardar en DB
+    // ==============================
+    const newZone = await Zone.create(zoneData);
+
+    console.log(
+      `Zona basada en plantilla "${templateName}" guardada para showId ${showId}`
+    );
 
     return newZone;
 
   } catch (error) {
-    console.error('Error en el controlador addZone:', error);
+    console.error('Error en addZone:', error);
     throw error;
   }
 };

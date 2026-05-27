@@ -6,13 +6,17 @@ const getShowById = require('../handlers/show/getShowByIdHandler');
 const editShow = require('../handlers/show/editShowHandler');
 const disableShow = require('../handlers/show/disableShowHandler');
 const deleteShow = require('../handlers/show/deleteShowhandler');
+const auth = require('../middlewares/auth');
+const admin = require('../middlewares/admin');
 
-
+//Public
 showRouter.get('/', getAllShows);
 showRouter.get('/:id', getShowById);
-showRouter.put('/edit', editShow);
-showRouter.delete('/disable/:showId', disableShow);
-showRouter.post('/', createShow);
-showRouter.delete('/delete/:showId', deleteShow);
+
+//Admin
+showRouter.post('/', auth, admin, createShow);
+showRouter.put('/edit', auth, admin, editShow);
+showRouter.delete('/delete/:showId', auth, admin, deleteShow);
+showRouter.delete('/disable/:showId', auth, admin, disableShow);
 
 module.exports = showRouter;

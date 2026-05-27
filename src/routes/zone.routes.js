@@ -8,15 +8,19 @@ const addGeneralZone = require('../handlers/generalZone/addGeneralZoneHandler');
 const editZone = require('../handlers/zone/editZoneHandler');
 const editGeneralZone = require('../handlers/generalZone/editGeneralZoneHandler');
 const filterZone = require('../handlers/zone/filterZoneHandler');
+const auth = require('../middlewares/auth');
+const admin = require('../middlewares/admin');
 
-
-zoneRouter.post('/', createZone);
+//Public
 zoneRouter.get('/', getAllZones);
 zoneRouter.get('/general', getGeneralZones);
-zoneRouter.post('/add', addZone);
-zoneRouter.post('/add/general', addGeneralZone);
-zoneRouter.put('/edit', editZone);
-zoneRouter.put('/edit/general', editGeneralZone);
 zoneRouter.get('/filter', filterZone);
+
+//Admin
+zoneRouter.post('/', auth, admin, createZone);
+zoneRouter.post('/add', auth, admin, addZone);
+zoneRouter.put('/edit', auth, admin, editZone);
+zoneRouter.post('/add/general', auth, admin, addGeneralZone);
+zoneRouter.put('/edit/general', auth, admin, editGeneralZone);
 
 module.exports = zoneRouter;
