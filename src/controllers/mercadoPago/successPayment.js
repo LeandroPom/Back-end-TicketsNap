@@ -84,9 +84,10 @@ module.exports = async (req, res) => {
     console.log("✅ Pago exitoso:", successPaymentInfo);
 
     // Redirigir a la página principal tras procesar el pago exitoso
-    const tickets = await ticketBuffer(paymentData.external_reference);
+    // const tickets = await ticketBuffer(paymentData.external_reference);
 
     return res.redirect(302, `${process.env.FRONTEND_URL}/success/tickets`);
+
 
   } catch (error) {
     console.error("❌ Error en successPayment:", error);

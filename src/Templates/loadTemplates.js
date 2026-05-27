@@ -1,47 +1,44 @@
-const { Zone } = require('../db'); // Importa el modelo desde la conexión principal a la DB
+const { Zone } = require('../db');
 const fs = require('fs');
 const path = require('path');
 
 module.exports = async (req, res) => {
   const { name } = req.params;
-  
-
-  // Formatear el nombre de la plantilla
   const templateName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
   try {
-    console.log(`Iniciando la carga de la plantilla: ${templateName}...`);
+    console.log(`Cargando plantilla: ${templateName}...`);
 
-    // Ruta al archivo JSON con la plantilla
     const templatePath = path.join(__dirname, `./${templateName}.json`);
-
-    // Verificar si el archivo de la plantilla existe
     if (!fs.existsSync(templatePath)) {
-      console.error(`Error: La plantilla "${templateName}" no existe en el directorio.`);
       return res.status(404).json({ message: `La plantilla "${templateName}" no existe.` });
     }
 
-    // Leer el archivo JSON de la plantilla
+    // Leemos el JSON directamente
     const zoneTemplate = JSON.parse(fs.readFileSync(templatePath, 'utf-8'));
+    zoneTemplate.zoneName = templateName; // opcional, para identificar
 
-    // Verificar si ya existe una plantilla con `isTemplate: true`
-    const existingTemplate = await Zone.findOne({ where: { isTemplate: true } });
+    // Buscamos en DB si ya existe **para ese template específico**
+    let existingTemplate = await Zone.findOne({
+      where: { isTemplate: true, showId: 0, /* aquí podrías usar zoneName si la agregás */ }
+    });
 
-    if (existingTemplate) {
-      console.log(`Error: Ya existe una plantilla cargada con "isTemplate: true".`);
-      return res.status(400).json({
-        message: `Error: Ya existe una plantilla cargada con "isTemplate: true".`,
+    // ⚠️ Validamos si la DB tiene la plantilla exacta
+    if (existingTemplate && existingTemplate.zoneName === templateName) {
+      console.log(`Plantilla "${templateName}" ya existe en DB.`);
+      return res.status(200).json({
+        zoneTemplate: existingTemplate,
+        message: `Plantilla "${templateName}" cargada desde DB.`,
       });
     }
 
-    // Crear el registro en la base de datos
-    await Zone.create(zoneTemplate);
-
-    console.log(`Plantilla "${templateName}" cargada exitosamente.`);
+    // Si no existe en DB, devolvemos el JSON original
+    console.log(`Plantilla "${templateName}" no existe en DB, se usará el JSON.`);
     return res.status(200).json({
       zoneTemplate,
-      message: `Plantilla "${templateName}" cargada exitosamente.`,
+      message: `Plantilla "${templateName}" cargada desde JSON.`,
     });
+
   } catch (error) {
     console.error(`Error al cargar la plantilla "${templateName}":`, error);
     return res.status(500).json({

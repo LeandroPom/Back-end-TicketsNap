@@ -19,10 +19,16 @@ module.exports = (sequelize) => {
             allowNull: false 
             // Nombre de la ubicación, obligatorio
         },
+        
         address: {
             type: DataTypes.STRING, 
             allowNull: false 
             // Dirección de la ubicación, opcional
+        },
+          prueba: {
+            type: DataTypes.STRING, 
+            allowNull: true 
+            
         }
     }, {
         timestamps: false, 

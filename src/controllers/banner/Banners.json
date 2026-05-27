@@ -1,3 +1,13 @@
 {
-  "bannerArray": []
+  "bannerArray": [
+    {
+      "name": "dinamico",
+      "url": "https://i.postimg.cc/sX2PvfKm/Banner-Franco.png"
+    },
+    {
+      "name": "dinamico 2",
+      "url": "https://i.postimg.cc/dQn42703/los-varela-banner.png"
+    }
+  ],
+  "staticArray": []
 }

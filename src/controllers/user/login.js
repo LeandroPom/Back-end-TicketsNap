@@ -1,47 +1,100 @@
+require('dotenv').config();
 const { User } = require('../../db');
 const comparePassword = require('../user/comparePassword');
+const jwt = require('jsonwebtoken');
 
-const MAX_FAILED_ATTEMPTS = 12; // Número máximo de intentos fallidos
+const MAX_FAILED_ATTEMPTS = 99;
 
 module.exports = async (req, res) => {
   try {
-    const { mail, password } = req.body; // Extraer email y password desde el body
-    console.log(mail)
+    const { mail, password } = req.body;
 
-    if (!mail || !password) {
-      return res.status(400).json({ error: "Se requieren mail y password" });
+    if (!mail) {
+      return res.status(400).json({ error: "Se requiere mail" });
     }
 
-    // **Paso 1: Buscar User por email**
+    // Buscar usuario por email
     const user = await User.findOne({ where: { email: mail } });
-
     if (!user) {
-      return res.status(404).json({ error: `No se encontró ningún usuario registrado con el email "${mail}".` });
+      return res.status(404).json({ error: `No se encontró ningún usuario con el email "${mail}".` });
     }
 
-    // **Paso 2: Manejo de intentos fallidos**
+    // Verificar si la cuenta está bloqueada
     if (user.failedAttempts >= MAX_FAILED_ATTEMPTS) {
       return res.status(403).json({ error: "Cuenta bloqueada por demasiados intentos fallidos. Contacta con soporte." });
     }
 
-    // **Paso 3: Comparar la contraseña con el hash almacenado**
-    const isValidPassword = await comparePassword(password, user.password);
+    // ===== LOGIN CON GOOGLE =====
+    if (!password) {
+      if (user.disabled) {
+        return res.status(403).json({ error: "Cuenta bloqueada. Contacta con soporte." });
+      }
 
-    if (!isValidPassword) {
-      // Incrementar intentos fallidos y actualizar en la base de datos
-      await user.update({ failedAttempts: user.failedAttempts + 1 });
-      return res.status(401).json({ error: `Contraseña incorrecta. Intentos restantes: ${MAX_FAILED_ATTEMPTS - user.failedAttempts - 1}` });
+      const token = jwt.sign(
+        {
+          id: user.id,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          cashier: user.cashier,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '2h' }
+      );
+
+      return res.status(200).json({
+        message: "Inicio de sesión exitoso (Google)",
+        token,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          cashier: user.cashier,
+          disabled: user.disabled,
+          image: user.image
+        }
+      });
     }
 
-    // **Paso 4: Restablecer intentos fallidos si el login es exitoso**
+    // ===== LOGIN NORMAL =====
+    const isValidPassword = await comparePassword(password, user.password);
+    if (!isValidPassword) {
+      await user.update({ failedAttempts: user.failedAttempts + 1 });
+      return res.status(401).json({
+        error: `Contraseña incorrecta. Intentos restantes: ${MAX_FAILED_ATTEMPTS - user.failedAttempts - 1}`
+      });
+    }
+
+    // Resetear intentos fallidos
     if (user.failedAttempts > 0) {
       await user.update({ failedAttempts: 0 });
     }
 
-    // **Paso 5: Retornar el usuario autenticado (sin exponer la contraseña)**
+    // Crear JWT
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        cashier: user.cashier,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+
+    // Respuesta (login normal)
     return res.status(200).json({
       message: "Inicio de sesión exitoso",
-      user
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        cashier: user.cashier,
+        disabled: user.disabled,
+        image: user.image
+      }
     });
 
   } catch (error) {

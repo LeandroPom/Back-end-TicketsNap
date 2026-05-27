@@ -23,7 +23,8 @@ server.use(cors(corsOptions));
 server.use(morgan("dev"));
 
 // Middleware para procesar JSON
-server.use(express.json());
+server.use(express.json({ limit: "10mb" }));
+server.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 // Usa las rutas definidas en el enrutador
 server.use(router);

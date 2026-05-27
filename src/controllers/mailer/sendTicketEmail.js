@@ -52,6 +52,6 @@ module.exports = async (ticketsData = []) => {
     return { success: true, message: "Correo enviado con éxito." };
   } catch (error) {
     console.error("❌ Error al enviar el correo:", error);
-    throw new Error("Error al enviar el correo.");
+   return { success: false, message: "No se pudo enviar el correo, pero el flujo continúa." };
   }
 };
