@@ -80,14 +80,14 @@ module.exports = async (ticketId, name, mail, phone, dni, price, zoneId, showId,
       },
 
       back_urls: {
-        success: `${process.env.BACKEND_URL_NG}/api/payments/success`,
-        failure: `${process.env.BACKEND_URL_NG}/api/payments/failure`,
-        pending: `${process.env.BACKEND_URL_NG}/api/payments/pending`,
+        success: `${process.env.BACKEND_URL}/api/payments/success`,
+        failure: `${process.env.BACKEND_URL}/api/payments/failure`,
+        pending: `${process.env.BACKEND_URL}/api/payments/pending`,
       },
 
       auto_return: "approved",
 
-      notification_url: `${process.env.BACKEND_URL_NG}/api/payments/notification`,
+      notification_url: `${process.env.BACKEND_URL}/api/payments/notification`,
 
       external_reference: `ticketId: ${ticketId}, zoneId: ${zoneId}, showId: ${showId}, mail: ${mail}`,
 
