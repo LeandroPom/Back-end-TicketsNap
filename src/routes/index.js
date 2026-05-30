@@ -9,29 +9,31 @@ const mpRouter = require('./payment.routes');
 const analiticsRouter = require('./analitics.routes');
 const templateRouter = require('./template.routes');
 const bannerRouter = require('./banner.routes');
-
-
+const auth = require('../middlewares/auth');
+const admin = require('../middlewares/admin');
 
 const router = Router();
 
-
 router.use((req, res, next) => {
-    console.log(`Solicitud a la ruta: ${req.url}`);
-    next();
+  console.log(`Solicitud a la ruta: ${req.url}`);
+  next();
 });
 
-
-router.use('/api/analitics', analiticsRouter);
+// Public
+router.use('/api/tags', tagRouter);
 router.use('/api/users', userRouter);
 router.use('/api/shows', showRouter);
-router.use('/api/tags', tagRouter);
-router.use('/api/places', placeRouter);
 router.use('/api/zones', zoneRouter);
-router.use('/api/tickets', ticketRouter);
-router.use('/api/payments', mpRouter);
-router.use('/api/templates', templateRouter);
+router.use('/api/places', placeRouter);
 router.use('/api/banners', bannerRouter);
+router.use('/api/payments', mpRouter);
 
+// Users
+router.use('/api/tickets', auth, ticketRouter);
+
+// Admin
+router.use('/api/templates', auth, admin, templateRouter);
+router.use('/api/analitics', auth, admin, analiticsRouter);
 
 
 module.exports = router;

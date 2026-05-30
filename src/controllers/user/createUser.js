@@ -48,6 +48,7 @@ module.exports = async (name, email, phone, password, image, cashier, admin, goo
       disabled: false,
       isAdmin: admin || false,
       google: google, // Guardar si el usuario proviene de Google
+      assignedEvents: null
     });
 
     return newUser;

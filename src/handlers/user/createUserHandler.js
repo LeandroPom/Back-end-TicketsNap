@@ -2,7 +2,7 @@ const createUser = require('../../controllers/user/createUser');
 
 module.exports = async (req, res) => {
   const { name, email, phone, password, image, cashier, admin, google } = req.body;
-//   const createdBy = req.user?.id || "System"; // Obtener quién crea al usuario, por ejemplo, desde un token
+//   const createdBy = req.user?.id || "System"; // Obtener quiÃ©n crea al usuario, por ejemplo, desde un token
 
   try {
     const newUser = await createUser(name, email, phone, password, image, cashier, admin, google);

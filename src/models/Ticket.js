@@ -65,22 +65,27 @@ module.exports = (sequelize) => {
         allowNull: false,
         // Precio del ticket, obligatorio
       },
+      chargePrice: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+        // Precio del ticket, obligatorio
+      },
       name: {
-        type: DataTypes.STRING, 
-        allowNull: true 
+        type: DataTypes.STRING,
+        allowNull: true
         // Nombre obligatorio
       },
       dni: {
-          type: DataTypes.INTEGER,
-          allowNull: true 
+        type: DataTypes.INTEGER,
+        allowNull: true
       },
       mail: {
-          type: DataTypes.STRING,
-          allowNull: true,
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       phone: {
-          type: DataTypes.STRING,
-          allowNull: true
+        type: DataTypes.STRING,
+        allowNull: true
       },
       qrCode: {
         type: DataTypes.TEXT,
@@ -89,7 +94,13 @@ module.exports = (sequelize) => {
       qrToken: {
         type: DataTypes.BOOLEAN,
         defaultValue: true, // El QR empieza sin usarse
-      }
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: DataTypes.NOW,
+        // Fecha automática de creación del ticket
+      },
     },
     {
       timestamps: false,

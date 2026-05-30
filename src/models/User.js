@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: true // Se eliminaron las validaciones, ahora están en createUser.js
+      allowNull: true // Se eliminaron las validaciones, ahora estÃ¡n en createUser.js
     },
     registrationDate: {
       type: DataTypes.DATE,
@@ -37,6 +37,10 @@ module.exports = (sequelize) => {
     cashier: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    assignedEvents: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      allowNull: true
     },
     google: {
       type: DataTypes.BOOLEAN,

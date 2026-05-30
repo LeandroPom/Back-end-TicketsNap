@@ -1,27 +1,27 @@
 // sendTicketsEmail.js
 require("dotenv").config();
 const transporter = require("./nodemailerConfig");
-const generateTicketsPDF = require("./generateTicketPDF"); // 👈 importante: usar la nueva función
+const generateTicketsPDF = require("./generateTicketPDF");
 const fs = require("fs");
 
 module.exports = async (ticketsData = []) => {
+  let pdfPath;
+
   try {
     if (!ticketsData.length) {
       throw new Error("No se proporcionaron tickets para enviar.");
     }
 
-    // 📌 Log para ver qué datos llegan
-    console.log("📩 Tickets recibidos en sendTicketsEmail:", ticketsData.map(t => ({
+    console.log("📩 Tickets recibidos:", ticketsData.map(t => ({
       showId: t.showId,
       id: t.id,
       name: t.name,
       mail: t.mail
     })));
 
-    // ✅ Generar un único PDF con todos los tickets
-    const pdfPath = await generateTicketsPDF(ticketsData);
+    pdfPath = await generateTicketsPDF(ticketsData);
 
-    const destinatario = ticketsData[0].mail; // asumimos que todos van al mismo mail
+    const destinatario = ticketsData[0].mail;
     const nombre = ticketsData[0].name;
 
     const mailOptions = {
@@ -37,21 +37,67 @@ module.exports = async (ticketsData = []) => {
       ],
     };
 
-    // 📤 Enviar el correo
     await transporter.sendMail(mailOptions);
-    console.log(`✅ Correo enviado a: ${destinatario} con ${ticketsData.length} tickets en 1 PDF`);
 
-    // 🗑️ Eliminar PDF temporal
-    try {
-      fs.unlinkSync(pdfPath);
-      console.log(`🗑️ PDF temporal eliminado: ${pdfPath}`);
-    } catch (err) {
-      console.warn(`⚠️ No se pudo eliminar ${pdfPath}:`, err);
-    }
-
+    
     return { success: true, message: "Correo enviado con éxito." };
+
   } catch (error) {
     console.error("❌ Error al enviar el correo:", error);
-    throw new Error("Error al enviar el correo.");
+
+    return {
+      success: false,
+      message: "No se pudo enviar el correo, pero el flujo continúa."
+    };
+
+  } finally {
+    // 🧹 borrar PDF actual
+    if (pdfPath) {
+      try {
+        fs.unlinkSync(pdfPath);
+        
+      } catch (err) {
+        console.warn(`⚠️ No se pudo eliminar PDF actual:`, err);
+      }
+    }
+
+    // 🧹 limpiar PDFs viejos temp_tickets_
+    try {
+      const projectRoot = process.cwd(); // 🔥 CLAVE DEL FIX
+      const files = fs.readdirSync(projectRoot);
+      const now = Date.now();
+
+     
+
+      files.forEach(file => {
+        if (!file.startsWith("temp_tickets_")) {
+          return;
+        }
+
+        const filePath = `${projectRoot}/${file}`;
+
+        try {
+          const stats = fs.statSync(filePath);
+
+          const age = now - stats.birthtimeMs;
+
+        
+          // 🔥 5 segundos (test)
+          if (age > 5000) {
+            fs.unlinkSync(filePath);
+            console.log("🗑️ ELIMINADO:", file);
+          } else {
+            console.log("🟡 NO BORRADO (muy reciente):", file);
+          }
+
+        } catch (err) {
+          console.log("❌ Error procesando archivo:", file);
+          console.error(err);
+        }
+      });
+
+    } catch (err) {
+      console.warn("⚠️ No se pudo limpiar temp tickets:", err);
+    }
   }
 };
