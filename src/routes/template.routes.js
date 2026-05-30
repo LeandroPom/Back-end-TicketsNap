@@ -14,7 +14,7 @@ templateRouter.get("/", getTemplates);
 templateRouter.post("/", auth, admin, createTemplate);
 
 // cargar template por nombre
-templateRouter.get("/:name", loadTemplates);
+templateRouter.get("/:name", auth, admin, loadTemplates);
 
 module.exports = templateRouter;
 
