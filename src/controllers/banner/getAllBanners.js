@@ -16,7 +16,7 @@ module.exports = async () => {
     const fileData = fs.readFileSync(filePath, "utf-8");
     const Banners = JSON.parse(fileData);
 
-    // 🔹 Asegurar arrays válidos
+    // Asegurar arrays válidos
     if (!Array.isArray(Banners.bannerArray)) {
       Banners.bannerArray = [];
     }
@@ -24,6 +24,9 @@ module.exports = async () => {
     if (!Array.isArray(Banners.staticArray)) {
       Banners.staticArray = [];
     }
+
+    // El último banner agregado aparece primero
+    Banners.bannerArray = [...Banners.bannerArray].reverse();
 
     return Banners;
 
