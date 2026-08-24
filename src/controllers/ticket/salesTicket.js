@@ -194,9 +194,12 @@ module.exports = async (tickets = [], service) => {
       const basePrice = Number(price);
       const serviceCharge = Number(show.serviceCharge);
 
-      const chargePrice = Number(
-        (basePrice + (basePrice * serviceCharge / 100)).toFixed(2)
-      );
+      const chargePrice =
+        service === "CASH"
+          ? basePrice
+          : Number(
+            (basePrice + (basePrice * serviceCharge / 100)).toFixed(2)
+          );
 
       // Creaci贸n del ticket (por show)
       const presentation = show.presentation?.[0];
@@ -238,7 +241,7 @@ module.exports = async (tickets = [], service) => {
 
       mpTicketIds.push(newTicket.id);
 
-      if (service === "CASH") {
+      if (service === "CASH" || service === "OTHER") {
 
         await Ticket.update(
           { state: true },
@@ -279,7 +282,7 @@ module.exports = async (tickets = [], service) => {
       );
     }
 
-    if (service === "CASH" && createdTickets.length > 0) {
+    if ((service === "CASH" || service === "OTHER") && createdTickets.length > 0) {
 
       const ticketObjects = mpTicketIds.map(id => ({
         ticketId: id
@@ -287,7 +290,7 @@ module.exports = async (tickets = [], service) => {
 
       await seatManager(ticketObjects, "buy");
 
-      // await sendTicketsEmail(createdTickets);
+      //await sendTicketsEmail(createdTickets);
     }
 
     return createdTickets;
