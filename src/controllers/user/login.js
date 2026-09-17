@@ -3,7 +3,7 @@ const { User } = require('../../db');
 const comparePassword = require('../user/comparePassword');
 const jwt = require('jsonwebtoken');
 
-const MAX_FAILED_ATTEMPTS = 99;
+const MAX_FAILED_ATTEMPTS = 15;
 
 module.exports = async (req, res) => {
   try {
@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
           cashier: user.cashier,
         },
         process.env.JWT_SECRET,
-        { expiresIn: '2h' }
+        { expiresIn: '6h' }
       );
 
       return res.status(200).json({
@@ -79,7 +79,7 @@ module.exports = async (req, res) => {
         cashier: user.cashier,
       },
       process.env.JWT_SECRET,
-      { expiresIn: '2h' }
+      { expiresIn: '6h' }
     );
 
     // Respuesta (login normal)
