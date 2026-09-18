@@ -1,16 +1,18 @@
+//src/routes/ticket.routes.js
 const { Router } = require('express');
 const ticketRouter = Router();
 
 const getAllTickets = require('../handlers/ticket/getAllTicketsHandler');
 const getTicketById = require('../handlers/ticket/getTicketByIdHandler');
 const salesTicket = require('../handlers/ticket/salesTicketHandler');
-const cancelTicket = require('../handlers/ticket/cancelTicketHandler');
-const cancelGeneralTicket = require('../handlers/ticket/cancelGeneralTicketHandler');
+const bulkCancelTicket = require('../handlers/ticket/bulkCancelTicketHandler');
 
 const useQR = require('../controllers/ticket/useQR');
 const offQR = require('../controllers/ticket/offQR');
 
 const gift = require('../handlers/ticket/giftTicketHandler');
+const getRegistry = require("../handlers/registry/getRegistryHandler");
+
 
 const auth = require('../middlewares/auth');
 const admin = require('../middlewares/admin');
@@ -26,8 +28,8 @@ ticketRouter.put('/offQR/:id', auth, cashier, offQR);
 
 // Admin
 ticketRouter.get('/gift/:id',auth, admin, gift);
-ticketRouter.delete('/cancel/:ticketId',auth, admin, cancelTicket);
-ticketRouter.delete('/cancel/general/:ticketId',auth, admin, cancelGeneralTicket);
+ticketRouter.delete('/cancel/:ticketId',auth, admin, bulkCancelTicket);
+ticketRouter.post('/registry',auth, admin, getRegistry)
 
 // IMPORTANT:
 // Dynamic routes like "/:id" must always go at the end
