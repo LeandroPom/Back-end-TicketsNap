@@ -1,221 +1,184 @@
+// controllers/ticket/salesTicket.js
 require("dotenv").config();
 const { Ticket, Show, Zone, GeneralZone } = require("../../db");
 const filterZone = require("../zone/filterZone");
 const payment = require("../mercadoPago/payment");
 const QRCode = require("qrcode");
-const sendTicketsEmail = require("../mailer/sendTicketEmail");
 const seatManager = require("./seatManager");
 
 module.exports = async (tickets = [], service) => {
   try {
+    // **Variables generales de la operación**
     let totalPrice = 0;
-    let createdTickets = [];
-    let mpTicketIds = [];
+    const createdTickets = [];
+    const mpTicketIds = [];
 
-    /**
-     * -----------------------------------------------------------
-     * 馃敼 Validaci贸n previa para compras m煤ltiples
-     * -----------------------------------------------------------
-     * Agrupamos tickets por:
-     * - zoneId
-     * - division
-     * para validar capacidad disponible antes de crear tickets
-     */
-    const groupedTickets = {};
-
-    for (const ticket of tickets) {
+    // **Agrupar espacios para validar capacidad total solicitada**
+    const groups = tickets.reduce((groups, ticket) => {
       const key = `${ticket.zoneId}-${ticket.division}`;
+      (groups[key] ||= []).push(ticket);
+      return groups;
+    }, {});
 
-      if (!groupedTickets[key]) {
-        groupedTickets[key] = [];
-      }
+    // **Validar capacidad de divisiones generales antes de crear tickets**
+    for (const group of Object.values(groups)) {
+      const { zoneId, division, row, seatId } = group[0];
 
-      groupedTickets[key].push(ticket);
-    }
-
-    /**
-     * -----------------------------------------------------------
-     * 馃敼 Verificar operaciones posibles por grupo
-     * -----------------------------------------------------------
-     */
-    for (const key in groupedTickets) {
-      const group = groupedTickets[key];
-      const sampleTicket = group[0];
-
-      const { zoneId, division, row, seatId } = sampleTicket;
+      // **Solo aplica a espacios sin fila/asiento**
+      if (row || seatId) continue;
 
       const zone = await Zone.findByPk(zoneId);
       const generalZone = await GeneralZone.findByPk(zoneId);
 
-      // 馃敼 Solo validar capacidad para zonas generales
-      if (!(row || seatId)) {
-
-        let availableOperations = 0;
-
-        // 馃敼 Tribunas Generales
-        if (zone && division === "Tribunas Generales") {
-
-          const tribunaData = await filterZone(zoneId, division);
-          const tribunaInfo = tribunaData?.[0];
-
-          if (!tribunaInfo) {
-            throw new Error(`Divisi贸n "${division}" no encontrada.`);
-          }
-
-          availableOperations =
-            Number(tribunaInfo.space) - Number(tribunaInfo.occupied);
-
-        }
-        // 馃敼 GeneralZone
-        else if (generalZone) {
-
-          const divisionData = generalZone.location.find(
-            d => d.division === division
+      // **Buscar división general en Zone o GeneralZone**
+      const divisionInfo = zone
+        ? (await filterZone(zoneId, division))[0]
+        : generalZone?.location?.find(
+            (div) => div.division === division
           );
 
-          if (!divisionData) {
-            throw new Error(`Divisi贸n general "${division}" no encontrada.`);
-          }
-
-          availableOperations =
-            Number(divisionData.space) - Number(divisionData.occupied);
-
-        }
-
-        const ticketsRequested = group.length;
-
-        // 馃敼 Validaci贸n principal solicitada
-        if (availableOperations <= 0) {
-          throw new Error(
-            `No hay espacios disponibles en la divisi贸n "${division}".`
-          );
-        }
-
-        // 馃敼 Validaci贸n compra m煤ltiple
-        if (availableOperations < ticketsRequested) {
-          throw new Error(
-            `Los espacios disponibles no son suficientes para realizar la operaci贸n en la divisi贸n "${division}".`
-          );
-        }
-      }
-    }
-
-    for (const ticket of tickets) {
-      const {
-        showId, zoneId, division, row, seatId, price,
-        name, dni, mail, phone, userId,
-      } = ticket;
-
-      const show = await Show.findByPk(showId);
-      if (!show) throw new Error(`Show con ID "${showId}" no encontrado.`);
-
-      const zone = await Zone.findByPk(zoneId);
-      const generalZone = await GeneralZone.findByPk(zoneId);
-
-      let validPrice;
-      let rowValue = null;
-      let seatValue = null;
-
-      // Validaciones de precio y disponibilidad
-      if (row || seatId) {
-        if (!zone) throw new Error(`Zona no encontrada para asiento con fila/asiento definido.`);
-
-        const seatData = await filterZone(zoneId, division, row, seatId);
-        const seatInfo = seatData?.[0];
-
-        if (!seatInfo || seatInfo.taken)
-          throw new Error(`Asiento ${seatId} ocupado o inexistente.`);
-
-        if (zone.generalTicket) {
-          const divisionData = await filterZone(zoneId, division);
-          validPrice = Number(divisionData?.[0]?.generalPrice);
-        } else {
-          const rowData = await filterZone(zoneId, division, row);
-          validPrice = Number(rowData?.[0]?.rowPrice);
-        }
-
-        if (Number(price) !== validPrice)
-          throw new Error(`Precio incorrecto para asiento.`);
-
-        rowValue = row;
-        seatValue = seatId;
-
-      } else if (zone && division === "Tribunas Generales") {
-
-        const tribunaData = await filterZone(zoneId, division);
-        const tribunaInfo = tribunaData?.[0];
-
-        if (!tribunaInfo)
-          throw new Error(`Divisi贸n "${division}" inexistente.`);
-
-        /**
-         * -----------------------------------------------------------
-         * 馃敼 Nueva l贸gica de operaciones posibles
-         * -----------------------------------------------------------
-         */
-        const availableOperations =
-          Number(tribunaInfo.space) - Number(tribunaInfo.occupied);
-
-        if (availableOperations <= 0)
-          throw new Error(`Sin espacio en la divisi贸n "${division}".`);
-
-        validPrice = Number(tribunaInfo.generalPrice);
-
-        if (Number(price) !== validPrice)
-          throw new Error(`Precio inv谩lido para la divisi贸n "${division}".`);
-
-      } else if (generalZone) {
-
-        const divisionData = generalZone.location.find(
-          d => d.division === division
+      if (!divisionInfo)
+        throw new Error(
+          `División "${division}" no encontrada.`
         );
 
-        if (!divisionData)
-          throw new Error(`Divisi贸n general "${division}" inexistente.`);
+      // **Validar capacidad disponible**
+      const available =
+        Number(divisionInfo.space) -
+        Number(divisionInfo.occupied || 0);
 
-        /**
-         * -----------------------------------------------------------
-         * 馃敼 Nueva l贸gica de operaciones posibles
-         * -----------------------------------------------------------
-         */
-        const availableOperations =
-          Number(divisionData.space) - Number(divisionData.occupied);
+      if (available < group.length)
+        throw new Error(
+          `No hay suficientes espacios disponibles en la división "${division}".`
+        );
+    }
 
-        if (availableOperations <= 0)
-          throw new Error(`Sin espacio en la divisi贸n general "${division}".`);
+    // **Procesar y crear tickets**
+    for (const ticket of tickets) {
+      const {
+        showId,
+        zoneId,
+        division,
+        row,
+        seatId,
+        price,
+        name,
+        dni,
+        mail,
+        phone,
+        userId,
+      } = ticket;
 
-        validPrice = Number(divisionData.price);
+      // **Recuperar show y posibles zonas**
+      const [show, zone, generalZone] = await Promise.all([
+        Show.findByPk(showId),
+        Zone.findByPk(zoneId),
+        GeneralZone.findByPk(zoneId),
+      ]);
 
-        if (Number(price) !== validPrice)
-          throw new Error(`Precio inv谩lido para zona general.`);
-      }
+      if (!show)
+        throw new Error(
+          `Show con ID "${showId}" no encontrado.`
+        );
 
-      // 馃敼 Calcular chargePrice usando serviceCharge (%)
-      const basePrice = Number(price);
-      const serviceCharge = Number(show.serviceCharge);
+      // **Valores normalizados para el ticket**
+      let rowValue = row || null;
+      let seatValue = seatId || null;
+      let validPrice;
 
-      const chargePrice =
-        service === "CASH"
-          ? basePrice
-          : Number(
-            (basePrice + (basePrice * serviceCharge / 100)).toFixed(2)
+      // **Validar asiento**
+      if (row || seatId) {
+        if (!zone)
+          throw new Error(
+            `Zona "${zoneId}" no encontrada para el asiento.`
           );
 
-      // Creaci贸n del ticket (por show)
-      const presentation = show.presentation?.[0];
+        const seat = (
+          await filterZone(
+            zoneId,
+            division,
+            row,
+            seatId
+          )
+        )[0];
 
-      if (!presentation) {
-        throw new Error(`El show no tiene presentaciones.`);
+        if (!seat || seat.taken)
+          throw new Error(
+            `Asiento "${seatId}" ocupado o inexistente.`
+          );
+
+        // **Precio general o precio específico de fila**
+        validPrice = zone.generalTicket
+          ? Number(
+              (await filterZone(zoneId, division))[0]
+                ?.generalPrice
+            )
+          : Number(
+              (await filterZone(zoneId, division, row))[0]
+                ?.rowPrice
+            );
+
+        if (Number(price) !== validPrice)
+          throw new Error(
+            `Precio incorrecto para asiento "${seatId}".`
+          );
       }
 
-      // 馃敼 Datos de la presentaci贸n
+      // **Validar espacio general**
+      else {
+        const divisionInfo = zone
+          ? (await filterZone(zoneId, division))[0]
+          : generalZone?.location?.find(
+              (div) => div.division === division
+            );
+
+        if (!divisionInfo)
+          throw new Error(
+            `División "${division}" no encontrada.`
+          );
+
+        // **Obtener precio configurado en la división**
+        validPrice = Number(
+          divisionInfo.generalPrice ??
+            divisionInfo.price
+        );
+
+        if (Number(price) !== validPrice)
+          throw new Error(
+            `Precio inválido para la división "${division}".`
+          );
+      }
+
+      // **Información de presentación**
+      const presentation =
+        show.presentation?.[0];
+
+      if (!presentation)
+        throw new Error(
+          `El show "${showId}" no tiene presentaciones.`
+        );
+
       const date = new Date(presentation.date)
         .toISOString()
         .split("T")[0];
 
-      const time = presentation.time;
-      const func = presentation.performance;
+      const { time, performance } = presentation;
 
+      // **Calcular precio final según servicio**
+      const basePrice = Number(price);
+      const chargePrice =
+        service === "CASH"
+          ? basePrice
+          : Number(
+              (
+                basePrice +
+                (basePrice *
+                  Number(show.serviceCharge)) /
+                  100
+              ).toFixed(2)
+            );
+
+      // **Crear ticket**
       const ticketData = {
         userId,
         zoneId,
@@ -224,7 +187,7 @@ module.exports = async (tickets = [], service) => {
         state: false,
         location: show.location,
         date: `${date} || ${time.start} - ${time.end}`,
-        function: func,
+        function: performance,
         row: rowValue,
         seat: seatValue,
         price,
@@ -232,29 +195,33 @@ module.exports = async (tickets = [], service) => {
         dni,
         mail,
         phone,
-        chargePrice
+        chargePrice,
       };
 
-      const newTicket = await Ticket.create(ticketData);
+      const newTicket = await Ticket.create(
+        ticketData
+      );
 
-      totalPrice += Number(price);
-
+      totalPrice += basePrice;
       mpTicketIds.push(newTicket.id);
 
-      if (service === "CASH" || service === "OTHER") {
-
-        await Ticket.update(
-          { state: true },
-          { where: { id: newTicket.id } }
+      // **Confirmar ticket y generar QR para operaciones directas**
+      if (
+        service === "CASH" ||
+        service === "OTHER"
+      ) {
+        const qrCode = await QRCode.toDataURL(
+          `${process.env.FRONTEND_URL}/tickets/useQR/${newTicket.id}`
         );
 
-        const qrUrl = `${process.env.FRONTEND_URL}/tickets/useQR/${newTicket.id}`;
-
-        const qrCode = await QRCode.toDataURL(qrUrl);
-
         await Ticket.update(
-          { qrCode },
-          { where: { id: newTicket.id } }
+          {
+            state: true,
+            qrCode,
+          },
+          {
+            where: { id: newTicket.id },
+          }
         );
 
         createdTickets.push({
@@ -267,8 +234,16 @@ module.exports = async (tickets = [], service) => {
       }
     }
 
+    // **Mercado Pago: enviar tickets al proceso de pago**
     if (service === "MP") {
-      const { name, mail, phone, dni, zoneId, showId } = tickets[0];
+      const {
+        name,
+        mail,
+        phone,
+        dni,
+        zoneId,
+        showId,
+      } = tickets[0];
 
       return await payment(
         mpTicketIds,
@@ -282,23 +257,29 @@ module.exports = async (tickets = [], service) => {
       );
     }
 
-    if ((service === "CASH" || service === "OTHER") && createdTickets.length > 0) {
-
-      const ticketObjects = mpTicketIds.map(id => ({
-        ticketId: id
-      }));
-
-      await seatManager(ticketObjects, "buy");
-
-      //await sendTicketsEmail(createdTickets);
+    // **Ocupar asientos/espacios después de crear tickets**
+    if (
+      (service === "CASH" ||
+        service === "OTHER") &&
+      mpTicketIds.length
+    ) {
+      await seatManager(
+        mpTicketIds.map((ticketId) => ({
+          ticketId,
+        })),
+        "buy"
+      );
     }
 
     return createdTickets;
-
   } catch (error) {
+    // **Error centralizado de venta**
+    console.error(
+      `❌ Error en salesTicketController: ${error.message}`
+    );
 
-    console.error("Error en salesTicketController:", error.message);
-
-    throw new Error(error.message);
+    throw new Error(
+      `Error en salesTicketController: ${error.message}`
+    );
   }
 };
