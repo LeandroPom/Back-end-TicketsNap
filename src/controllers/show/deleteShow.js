@@ -1,4 +1,5 @@
 const { Ticket, Show, Zone, GeneralZone, User } = require("../../db");
+const registryManager = require('../registry/registryManager')
 
 module.exports = async (showId) => {
   try {
@@ -52,6 +53,7 @@ module.exports = async (showId) => {
      * -----------------------------------------------------------
      */
     await Ticket.destroy({ where: { showId }, force: true });
+    await registryManager(showId, "clear");
 
     /**
      * -----------------------------------------------------------
